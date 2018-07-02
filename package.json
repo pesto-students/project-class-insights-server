@@ -1,0 +1,22 @@
+{
+  "name": "class-insights-server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": "https://github.com/PestoTech/project-class-insights-server.git",
+  "author": "monisahmad <monis.ahmad42@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon src/server.js"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.10.0",
+    "nodemon": "^1.17.5"
+  },
+  "dependencies": {
+    "express": "^4.16.3"  
+  }
+}
