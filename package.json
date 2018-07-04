@@ -6,7 +6,8 @@
   "author": "monisahmad <monis.ahmad42@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon src/server.js"
+    "start": "nodemon src/server.js",
+    "precommit": "lint-staged"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
@@ -14,6 +15,8 @@
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.10.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.2.0",
     "nodemon": "^1.17.5"
   },
   "dependencies": {
