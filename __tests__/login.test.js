@@ -20,8 +20,9 @@ describe('login route', () => {
   });
 
   afterAll((done) => {
-    mockgoose.reset(done);
+    mockgoose.reset();
     app.server.close();
+    done();
   });
   test('should respond with a 200 for login route', async (done) => {
     const response = await request(app).get('/');

@@ -12,6 +12,6 @@ module.exports = {
   DB_USER: process.env.DB_USER || 'root',
   DB_PASSWORD: process.env.DB_PASSWORD || '',
   DB_URI: process.env.DB_URI || 'mongodb://localhost:27017/classinsights',
-  JWT_ENCRYPTION: process.env.JWT_ENCRYPTION || '',
+  JWT_ENCRYPTION: process.env.JWT_ENCRYPTION || 'yourencrpytionhere',
   JWT_EXPIRATION: process.env.JWT_EXPIRATION || '12h',
 };
