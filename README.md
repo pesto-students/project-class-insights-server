@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/PestoTech/project-class-insights-server.svg?branch=master)](https://travis-ci.com/PestoTech/project-class-insights-server)
+
 # Project Class Insights: Server Side
 
 **URL**
