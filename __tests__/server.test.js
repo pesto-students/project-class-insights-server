@@ -1,12 +1,8 @@
-const request = require('supertest');
+import request from 'supertest';
 
-const app = require('../src/server');
+import app from '../src/server';
 
 describe('index route', () => {
-  afterEach(() => {
-    app.server.close();
-  });
-
   test('should respond with a 200 with no query parameters', () => {
     return request(app)
       .get('/')
@@ -34,5 +30,8 @@ describe('index route', () => {
       .then((response) => {
         expect(response.status).toEqual(404);
       });
+  });
+  afterAll(async () => {
+    await app.server.close();
   });
 });
