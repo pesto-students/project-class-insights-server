@@ -8,6 +8,12 @@ Check out the running instance of app here:
 
 https://class-insights.herokuapp.com/
 
+**Test URLS**
+
+https://classinsight-server.herokuapp.com/login
+
+https://classinsight-server.herokuapp.com/signup
+
 
 Description
 ===
@@ -39,23 +45,21 @@ yarn install
 
 ## Stack
 
-1. **MongoDB** - Primary DB - for it's free and open source nature with crossplatform and speed at it's core. Also it has it's server support for javascript. Having a unified language from frontend to backend gives advantage.
-2. **ExpressJS** - Server Framework - minimal application framework that provides a set of features. Few basic functionality that every basic app needs. Instead of recreating those just use this.
-3. **GraphQL** - Query Language - Prevents duplicate queries,and makes sure that we get what we want from the client's perspective.
-4. **Apollo Server** - GraphQL Client - Server part of the graphql. to interact with the database and give the result required by the graphql
-5. **Mongoose** - Object Modelling tool for MongoDB.
-6. **JWT** - JSON Web token - URL safe means of representing claims to be transferred between two parties.
-7. **Morgan** - Logging Tool
-8. **EJS** - Templating language
-9. **Validator** - User Input Validation
-10. **Dotenv** - Effective environment variables management
-11. **Unit testing** - Enzyme,jest
-12. **Next.js** - server side rendering for react
+1. **MongoDB** - Primary DB - for it's free and open source nature with cross-platform and speed at its core. Also, it has its server support for javascript. Having a unified language from frontend to backend gives an advantage.
+2. **ExpressJS** - Server Framework - minimal application framework that provides a set of features. Few basic functionalities that every basic app needs. Instead of recreating those just use this.
+3. **Mongoose** - Object Modelling tool for MongoDB.
+4. **JWT** - JSON Web token - URL safe means of representing claims to be transferred between two parties.
+5. **Morgan** - Logging Tool
+6. **EJS** - Templating language
+7. **Validator** - User Input Validation
+8. **Dotenv** - Effective environment variables management
+9. **Unit testing** - Enzyme, jest
+10. **Next.js** - server-side rendering for react.
  
 
 Team Members
 ---
 
-* Aditya Kumar Khare
-* Kundan Singh
-* Monis
+[![Kundan Vishen](https://github.com/kundanvishen.png?size=100)](https://github.com/kundanvishen) | [![Aditya Kumar Khare](https://github.com/adityad85.png?size=100)](https://github.com/adityad85) | [![Monis Ahmad](https://github.com/monisahmad.png?size=100)](https://github.com/monisahmad)
+---|---|---
+[Kundan Vishen](https://github.com/kundanvishen) | [Aditya Kumar Khare](https://github.com/adityad85) | [Monis Ahmad](https://github.com/monisahmad)
