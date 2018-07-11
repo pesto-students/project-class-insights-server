@@ -1,6 +1,7 @@
 import request from 'supertest';
 
 import app from '../src/server';
+import URLS from '../src/lib/urls';
 
 const existingUser = {
   email: 'theo@afc.com',
@@ -34,27 +35,27 @@ describe('POST / sends response', () => {
   });
 
   test('should respond with email already registered already existing user', async () => {
-    const response = await request(app).post('/signup').send(existingUser);
+    const response = await request(app).post(URLS.signup).send(existingUser);
     expect(response.body.error).toBe('email already registered');
     expect(response.statusCode).toBe(422);
   });
   test('should respond with All fields are required when incomplete data is sent', async () => {
-    const response = await request(app).post('/signup').send(incompleteUser);
+    const response = await request(app).post(URLS.signup).send(incompleteUser);
     expect(response.body.error).toBe('All fields are required');
     expect(response.statusCode).toBe(422);
   });
   test('should respond with email is not valid when email is in incorrect format', async () => {
-    const response = await request(app).post('/signup').send(invalidEmailUser);
+    const response = await request(app).post(URLS.signup).send(invalidEmailUser);
     expect(response.body.error).toBe('email is not valid');
     expect(response.statusCode).toBe(422);
   });
   test('should respond with email is not valid when email is in incorrect format', async () => {
-    const response = await request(app).post('/signup').send(invalidPasswordUser);
+    const response = await request(app).post(URLS.signup).send(invalidPasswordUser);
     expect(response.body.error).toBe('Password should be minimum 8 charachters long');
     expect(response.statusCode).toBe(422);
   });
   test('successful signup', async () => {
-    const response = await request(app).post('/signup').send(randomUser);
+    const response = await request(app).post(URLS.signup).send(randomUser);
     expect(response.body.success).toBe('user registration successful');
     expect(response.statusCode).toBe(200);
   });

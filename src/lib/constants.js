@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-module.exports = {
+export default {
   PORT: process.env.PORT || 3001,
   NODE_ENV: process.env.NODE_ENV || 'development',
   DB_DIALECT: process.env.DB_DIALECT || 'mongo',

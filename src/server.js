@@ -7,6 +7,7 @@ import config from './config/express';
 
 
 import CONSTANTS from './lib/constants';
+import URLS from './lib/urls';
 // Import all models
 import UserModel from './models/user.model';
 
@@ -16,6 +17,7 @@ import userRoutes from './routes/user.route';
 // Import required controllers
 import AuthController from './controllers/auth.controller';
 import signupController from './controllers/signupController';
+import submitformController from './controllers/submitformController';
 
 dotenv.config();
 
@@ -64,7 +66,8 @@ app.get('/setup', async (req, res) => {
   }
 });
 
-app.post('/login', AuthController.login);
-app.post('/signup', signupController.signup);
+app.post(URLS.login, AuthController.login);
+app.post(URLS.signup, signupController.signup);
+app.post(URLS.submitform, submitformController.submit);
 
 export default app;

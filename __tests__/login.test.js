@@ -1,6 +1,7 @@
 import request from 'supertest';
 
 import app from '../src/server';
+import URLS from '../src/lib/urls';
 
 const dummyUser = {
   email: 'theo@afc.com',
@@ -24,7 +25,7 @@ describe('POST / sends response', () => {
   });
 
   test('should respond with 200', async () => {
-    const response = await request(app).post('/login').send(dummyUser);
+    const response = await request(app).post(URLS.login).send(dummyUser);
     expect(response.statusCode).toBe(200);
   });
 });
