@@ -26,7 +26,7 @@ const signup = async (req, res) => {
     }
     if (error.message.includes('shorter than the minimum allowed length')) {
       res.status(422);
-      res.json({ error: 'Password should be minimum 8 charachters long' });
+      res.json({ error: 'Password should be minimum 8 characters long' });
     }
     console.log(error.message);
   }

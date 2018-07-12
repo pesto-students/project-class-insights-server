@@ -49,9 +49,9 @@ describe('POST / sends response', () => {
     expect(response.body.error).toBe('email is not valid');
     expect(response.statusCode).toBe(422);
   });
-  test('should respond with email is not valid when email is in incorrect format', async () => {
+  test('should respond with Password should be minimum 8 characters long when password is short', async () => {
     const response = await request(app).post(URLS.signup).send(invalidPasswordUser);
-    expect(response.body.error).toBe('Password should be minimum 8 charachters long');
+    expect(response.body.error).toBe('Password should be minimum 8 characters long');
     expect(response.statusCode).toBe(422);
   });
   test('successful signup', async () => {
