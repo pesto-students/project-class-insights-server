@@ -3,4 +3,7 @@ export default {
   signup: '/signup',
   submitform: '/submitform',
   submitfeedback: '/submitfeedback',
+  getFormById: '/getFormById',
+  getLatestForm: '/getLatestForm',
+  getForm: '/getForm',
 };

@@ -19,6 +19,7 @@ import AuthController from './controllers/auth.controller';
 import signupController from './controllers/signupController';
 import submitformController from './controllers/submitformController';
 import submitfeedbackController from './controllers/submitfeedbackController';
+import getFormController from './controllers/getFromController';
 
 dotenv.config();
 
@@ -71,5 +72,8 @@ app.post(URLS.login, AuthController.login);
 app.post(URLS.signup, signupController.signup);
 app.post(URLS.submitform, submitformController.submit);
 app.post(URLS.submitfeedback, submitfeedbackController.submitfeedback);
+app.get(`${URLS.getFormById}/:id`, getFormController.getFormById);
+app.get(URLS.getLatestForm, getFormController.getLatestForm);
+app.get(URLS.getForm, getFormController.getForm);
 
 export default app;
