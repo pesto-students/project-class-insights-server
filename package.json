@@ -6,13 +6,15 @@
   "author": "monisahmad <monis.ahmad42@gmail.com>, Aditya Kumar Khare <aditya85d@gmail.com> , Kundan Singh <kundanvishen@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js",
-    "start:babel": "babel-node -- index.js",
+    "start": "rm -rf build && babel src -d build && node ./build/index.js",
+    "start:babel": "babel-node -- ./src/index.js",
+    "build": "rm -rf build && babel src -d build",
     "start:babel-dev": "nodemon --exec babel-node -- index.js",
     "start:dev": "nodemon index.js",
     "precommit": "lint-staged",
     "test": "yarn lint && jest",
-    "lint": "eslint src/** __tests__/**"
+    "lint": "eslint src/** __tests__/**",
+    "clean": "rm -rf build"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -31,6 +33,7 @@
     "supertest": "^3.1.0"
   },
   "dependencies": {
+    "babel-polyfill": "^6.23.0",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "compression": "^1.7.2",
