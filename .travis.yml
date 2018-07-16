@@ -3,10 +3,3 @@ node_js:
 - '8'
 script:
 - yarn test
-deploy:
-  provider: heroku
-  api_key:
-    secure: R/gj0u9O2NrJyOtnYXhuV7gy8k8SPKLkiH/5CTUAJgDDnNmr/kCqE9yNG63Po64yBlHtVicJhupn+jkJ4Noftdd4LfCNrhFjoEHx9iKhAE9QtnU8aEhLNmyjadFyA1N6bzv/XV8oV+LRuP0H5fP9HtMpj7vWO7ho33tz9xyqkzvy55YRwmshodkdwhplbLIDOqA0HHWxmfEcZgSu9oOePZQ3EpoupVJVjPhk03M76fXVlKzeTG3AY4ITpUJ9byhkROFMr9lTpHBg9/GTBE1j2lcJRgZWe0RELmz3adjrGrzAIJ38Gadrc2jTn2U7QgpyQyo2hjgB1zQECdCaxZnjCMmN5fqn4r8dy9QOczeRc9EEmd5HWbQrTdHPPrpt/hJAY98zqD0o6XP+3mTGfKhj1bYWpU3n/8XkLJRI3DSz2SOVzbAhjUYPXyf0eSnNd7m3Xh473+SlfKN8XJ2Yf80IIZ1e6mGQ/LxWFlxg37MR7r4BW0eIlgJVxJNvbjE3tNQ27ljU12cAM2EMfk1FIr6smnjkXm25KB4XxGOWOVppF0cUB+uC7UgerqsvqFR1KvZwZs30Pao1XXHlmDVJ13+lTYIEvjx9h6NbI58XHLcwlOdyuP6or2mfAl7RXhJJbcFM9q6KmlHyB2W+r8yZudCfIGAmdH6mhEMZt1GDdh4bTjo=
-  app:
-    master: classinsights-stage
-    master-production: classinsights
