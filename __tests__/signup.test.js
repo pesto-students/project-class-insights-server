@@ -58,5 +58,5 @@ describe('POST / sends response', () => {
     const response = await request(app).post(URLS.signup).send(randomUser);
     expect(response.body.success).toBe('user registration successful');
     expect(response.statusCode).toBe(200);
-  });
+  }, 10000);
 });

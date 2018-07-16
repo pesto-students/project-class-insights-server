@@ -74,11 +74,11 @@ app.post(URLS.signup, signupController.signup);
 app.post(URLS.submitform, submitformController.submit);
 app.post(URLS.submitfeedback, submitfeedbackController.submitfeedback);
 app.get(`${URLS.getFormById}/:id`, getFormController.getFormById);
-app.get(URLS.getLatestForm, getFormController.getLatestForm);
 app.get(URLS.getForm, getFormController.getForm);
 app.get(URLS.allClassesFeedback, classesController.getClassesFeedback);
 app.get(URLS.anyDayFeedback, classesController.getThisDayClassFeedback);
 app.get(`${URLS.emailConfirmation}/:token`, signupController.confirmation);
 app.post(URLS.resendToken, signupController.resendToken);
+app.get(URLS.getLatestForm, getFormController.getLatestForm);
 
 export default app;
