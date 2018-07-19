@@ -13,11 +13,9 @@ const getFormById = async (req, res) => {
 };
 
 const getForm = async (req, res) => {
+  console.log(req.headers.authorization);
   const limit = Number(req.query.limit) || 5;
-  let sort = Number(req.query.sort) || -1;
-  if (sort < -1 || sort > 1) {
-    sort = -1;
-  }
+  const sort = Number(req.query.sort) || -1;
   const query = FeedbackformModel.find({}, {}, { sort: { date: sort } })
     .limit(Number(limit));
   await query.exec((err, form) => {

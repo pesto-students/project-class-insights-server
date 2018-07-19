@@ -3,9 +3,12 @@ import CONSTANTS from '../lib/constants';
 
 const ensureAuthenticated = (req, res, next) => {
   // get token from request
-  const token =
-    req.body.token || req.query.token || req.headers['x-access-token'];
-
+  let token;
+  const bearerHeader = req.headers.authorization;
+  if (bearerHeader) {
+    const bearer = bearerHeader.split(' ')[1];
+    token = bearer;
+  }
   if (token) {
     jwt.verify(token, CONSTANTS.JWT_ENCRYPTION, (err, decoded) => {
       if (err) {

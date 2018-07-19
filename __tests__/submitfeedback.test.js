@@ -7,6 +7,9 @@ const newFeedback = {
   _id: '5b4633336fb0d55498fb0420',
   subject: 'test subject15',
   topic: 'topic15 topic14',
+  batchId: 'P-01',
+  creationDate: '2018-07-10',
+  email: 'moni@mi.com',
   subtopics: [
     {
       rating: 7,

@@ -4,7 +4,9 @@ const submit = async (req, res) => {
   const newForm = new FeedbackformModel({
     subject: req.body.subject,
     topic: req.body.topic,
-
+    creationDate: req.body.creationDate,
+    batchId: req.body.batchId,
+    email: req.body.email,
     subtopics: req.body.subtopics.reduce((acc, curr) => {
       return [...acc, { subtopicName: curr.subtopicName },
       ];

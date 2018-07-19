@@ -7,6 +7,8 @@ import URLS from '../src/lib/urls';
 const newForm = {
   subject: 'test subject15',
   topic: 'topic15 topic14',
+  email: 'moni@mi.com',
+  batchId: 'p01',
   subtopics: [
     {
       subtopicName: 'subtopic15.1',

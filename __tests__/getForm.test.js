@@ -12,6 +12,7 @@ const formId = '5b47bbdc58514355dcdf8e45';
 const newForm = {
   subject: newSubject,
   topic: 'someTopic',
+  batchId: 'P-01',
   subtopics: [
     {
       subtopicName: 'somesubtopic 1',
