@@ -25,7 +25,7 @@ const login = async (req, res) => {
         });
       } else {
         // correct password, create token
-        const payload = { dummy: 'info' };
+        const payload = { email: req.body.email };
         const token = jwt.sign(payload, CONSTANTS.JWT_ENCRYPTION, {
           expiresIn: CONSTANTS.JWT_EXPIRATION, // expires in 12 hours
         });

@@ -20,6 +20,15 @@ const feedbackSubmissionSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  creationDate: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  batchId: String,
   subtopics: [subtopic],
   comments: String,
 });

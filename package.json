@@ -10,7 +10,7 @@
     "start:babel": "babel-node -- index.js",
     "start:babel-dev": "nodemon --exec babel-node -- index.js",
     "start:dev": "nodemon index.js",
-    "precommit": "lint-staged",
+    "precommit": "lint-staged && yarn test",
     "test": "yarn lint && jest",
     "lint": "eslint src/** __tests__/**"
   },

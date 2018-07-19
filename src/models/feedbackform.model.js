@@ -21,6 +21,16 @@ const feedbackFormSchema = mongoose.Schema({
   },
   subtopics: [subtopic],
   comments: [comment],
+  creationDate: {
+    type: String,
+  },
+  batchId: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+  },
 });
 
 const FeedbackFormModel = mongoose.model('feedbackFormModel', feedbackFormSchema);

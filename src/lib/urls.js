@@ -6,4 +6,11 @@ export default {
   getFormById: '/getFormById',
   getLatestForm: '/getLatestForm',
   getForm: '/getForm',
+  home: '/',
+  users: '/users',
+  status: '/status',
+  setup: '/setup',
+  allClassesFeedback: '/classes',
+  anyDayFeedback: '/lastclass',
+  getBatches: '/getBatches',
 };
