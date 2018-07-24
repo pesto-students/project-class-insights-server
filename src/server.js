@@ -78,5 +78,7 @@ app.get(URLS.getLatestForm, getFormController.getLatestForm);
 app.get(URLS.getForm, getFormController.getForm);
 app.get(URLS.allClassesFeedback, classesController.getClassesFeedback);
 app.get(URLS.anyDayFeedback, classesController.getThisDayClassFeedback);
+app.get(`${URLS.emailConfirmation}/:token`, signupController.confirmation);
+app.post(URLS.resendToken, signupController.resendToken);
 
 export default app;

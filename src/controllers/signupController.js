@@ -1,4 +1,8 @@
+/* eslint no-underscore-dangle: 0 */
 import UserModel from '../models/user.model';
+import triggerEmailVerification from '../helpers/triggerEmailVerification';
+import EmailVerify from '../models/emailVerification.model';
+
 
 const signup = async (req, res) => {
   const newUser = new UserModel({
@@ -8,7 +12,8 @@ const signup = async (req, res) => {
   });
 
   try {
-    await newUser.save();
+    const savedUser = await newUser.save();
+    await triggerEmailVerification(req, savedUser);
     console.log('User saved successfully');
     res.json({ success: 'user registration successful' });
   } catch (error) {
@@ -32,5 +37,69 @@ const signup = async (req, res) => {
   }
 };
 
-export default { signup };
+const confirmation = async (req, res) => {
+  try {
+    const emailVerify = await EmailVerify.findOne({ token: req.params.token });
+    if (!emailVerify) {
+      res.status(400);
+      res.json({
+        type: 'not-verified',
+        msg: 'We were unable to find a valid token. Your token may have expired.',
+      });
+    }
+    const user = await UserModel.findByIdAndUpdate(
+      emailVerify._userId,
+      { $set: { isVerified: true } },
+      { new: true },
+    );
+    if (!user) {
+      res.status(400);
+      res.json({ type: 'not-verified', msg: 'We were unable to find user for this token.' });
+    }
+    if (user.isVerified) {
+      res.json({ type: 'verified', msg: 'Email has been successfully verified' });
+    }
+  } catch (error) {
+    res.status(500);
+    res.send('oops, something went wrong');
+  }
+};
+
+const resendToken = async (req, res) => {
+  try {
+    const user = await UserModel.findOne({ email: req.body.email });
+    if (!user) {
+      res.status(400);
+      res.json({
+        success: false,
+        message: 'email not registered',
+      });
+      return;
+    }
+    if (user.isVerified) {
+      res.status(400);
+      res.json({
+        success: false,
+        message: 'This account has already been verified. Please log in.',
+      });
+      return;
+    }
+    const isEmailSent = await triggerEmailVerification(req, user);
+    if (isEmailSent) {
+      res.json({
+        success: true,
+        message: 'Verification email has been sent to registered email',
+      });
+    }
+  } catch (error) {
+    res.status(500);
+    res.send('oops, Something went wrong');
+  }
+};
+
+export default {
+  signup,
+  confirmation,
+  resendToken,
+};
 

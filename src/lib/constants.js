@@ -14,4 +14,6 @@ export default {
   DB_URI: process.env.DB_URI || 'mongodb://localhost:27017/classinsights',
   JWT_ENCRYPTION: process.env.JWT_ENCRYPTION || 'MySecret',
   JWT_EXPIRATION: process.env.JWT_EXPIRATION || '12h',
+  SENDGRID_USER: process.env.SENDGRID_USER,
+  SENDGRID_APIKEY: process.env.SENDGRID_APIKEY,
 };

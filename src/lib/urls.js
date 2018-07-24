@@ -13,4 +13,6 @@ export default {
   allClassesFeedback: '/classes',
   anyDayFeedback: '/lastclass',
   getBatches: '/getBatches',
+  emailConfirmation: '/confirmation',
+  resendToken: '/resend',
 };
