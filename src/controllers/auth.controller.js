@@ -14,8 +14,14 @@ const login = async (req, res) => {
         success: false,
         message: 'Authentication failed. User not found.',
       });
+      return;
     }
 
+    if (!user.isVerified) {
+      res.status(401);
+      res.json({ type: 'not-verified', msg: 'Your account has not been verified.' });
+      return;
+    }
     // check if correct password
     bcrypt.compare(req.body.password, user.password, (err, loginsuccess) => {
       if (!loginsuccess) {

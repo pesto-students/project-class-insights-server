@@ -29,6 +29,7 @@ const Schema = mongoose.Schema(
       required: true,
     },
     created_at: { type: Date, default: Date.now },
+    isVerified: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
