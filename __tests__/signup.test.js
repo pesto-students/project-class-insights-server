@@ -9,7 +9,6 @@ const existingUser = {
   name: 'theo',
 };
 const incompleteUser = {
-  email: 'theo@afc.com',
   password: 'password',
 };
 const randomNumber = Math.floor(100000 + (Math.random() * 900000));
@@ -38,7 +37,7 @@ describe('POST / sends response', () => {
     const response = await request(app).post(URLS.signup).send(existingUser);
     expect(response.body.error).toBe('email already registered');
     expect(response.statusCode).toBe(422);
-  });
+  }, 10000);
   test('should respond with All fields are required when incomplete data is sent', async () => {
     const response = await request(app).post(URLS.signup).send(incompleteUser);
     expect(response.body.error).toBe('All fields are required');

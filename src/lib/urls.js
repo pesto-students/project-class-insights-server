@@ -15,4 +15,7 @@ export default {
   getBatches: '/getBatches',
   emailConfirmation: '/confirmation',
   resendToken: '/resend',
+  batches: '/batches',
+  feedbacks: '/feedbacks',
+  students: '/students',
 };

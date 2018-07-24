@@ -1,13 +1,18 @@
 /* eslint no-underscore-dangle: 0 */
+import mongoose from 'mongoose';
+
 import UserModel from '../models/user.model';
 import triggerEmailVerification from '../helpers/triggerEmailVerification';
 import EmailVerify from '../models/emailVerification.model';
 import StudentInvite from '../models/studentInvite.model';
+import instructorController from './instructor.controller';
 
 
 const signup = async (req, res) => {
+  const _id = new mongoose.Types.ObjectId();
+  const { name } = req.body;
   const newUser = new UserModel({
-    name: req.body.name,
+    _id,
     email: req.body.email,
     password: req.body.password,
     isInstructor: req.body.isInstructor,
@@ -22,6 +27,8 @@ const signup = async (req, res) => {
       }
     }
     const savedUser = await newUser.save();
+    // set depending on the flag isInstructor to be true or false, else create student
+    instructorController.createInstructor(name, _id);
     await triggerEmailVerification(req, savedUser);
     console.log('User saved successfully');
     res.json({ success: 'user registration successful' });

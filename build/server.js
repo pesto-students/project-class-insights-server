@@ -16,6 +16,10 @@ var _mongoose = require('mongoose');
 
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
+var _asyncPolling = require('async-polling');
+
+var _asyncPolling2 = _interopRequireDefault(_asyncPolling);
+
 var _express3 = require('./config/express');
 
 var _express4 = _interopRequireDefault(_express3);
@@ -27,6 +31,10 @@ var _constants2 = _interopRequireDefault(_constants);
 var _urls = require('./lib/urls');
 
 var _urls2 = _interopRequireDefault(_urls);
+
+var _userConstants = require('./lib/userConstants');
+
+var _userConstants2 = _interopRequireDefault(_userConstants);
 
 var _user = require('./models/user.model');
 
@@ -56,18 +64,30 @@ var _getFromController = require('./controllers/getFromController');
 
 var _getFromController2 = _interopRequireDefault(_getFromController);
 
-var _classes = require('./controllers/classes.controller');
+var _batches = require('./controllers/batches.controller');
 
-var _classes2 = _interopRequireDefault(_classes);
+var _batches2 = _interopRequireDefault(_batches);
+
+var _feedbacks = require('./controllers/feedbacks.controller');
+
+var _feedbacks2 = _interopRequireDefault(_feedbacks);
+
+var _students = require('./controllers/students.controller');
+
+var _students2 = _interopRequireDefault(_students);
+
+var _batchUpdater = require('./helpers/batchUpdater');
+
+var _batchUpdater2 = _interopRequireDefault(_batchUpdater);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Import all routes
+_dotenv2.default.config();
 
 // Import required controllers
 
 // Import all models
-_dotenv2.default.config();
-
-// Import all routes
 
 
 const { DB_URI } = _constants2.default;
@@ -112,16 +132,31 @@ app.get('/setup', async (req, res) => {
   }
 });
 
+const poll = (0, _asyncPolling2.default)(end => {
+  _batchUpdater2.default.updateStudentCount();
+  end();
+}, _userConstants2.default.WAIT_TIME);
+poll.on('error', () => {
+  console.log('error in poll');
+});
+
+poll.run();
+
 app.post(_urls2.default.login, _auth2.default.login);
 app.post(_urls2.default.signup, _signupController2.default.signup);
 app.post(_urls2.default.submitform, _submitformController2.default.submit);
 app.post(_urls2.default.submitfeedback, _submitfeedbackController2.default.submitfeedback);
 app.get(`${_urls2.default.getFormById}/:id`, _getFromController2.default.getFormById);
 app.get(_urls2.default.getForm, _getFromController2.default.getForm);
-app.get(_urls2.default.allClassesFeedback, _classes2.default.getClassesFeedback);
-app.get(_urls2.default.anyDayFeedback, _classes2.default.getThisDayClassFeedback);
 app.get(`${_urls2.default.emailConfirmation}/:token`, _signupController2.default.confirmation);
 app.post(_urls2.default.resendToken, _signupController2.default.resendToken);
 app.get(_urls2.default.getLatestForm, _getFromController2.default.getLatestForm);
+app.get(`${_urls2.default.batches}/:id`, _batches2.default.getBatches);
+app.post(_urls2.default.batches, _batches2.default.createBatch);
+app.get(_urls2.default.feedbacks, _feedbacks2.default.getBatchesFeedback);
+app.patch(_urls2.default.batches, _batches2.default.editBatch);
+app.delete(_urls2.default.batches, _batches2.default.deleteBatch);
+app.get(_urls2.default.batches, _batches2.default.getBatchesMain);
+app.post(_urls2.default.students, _students2.default.createStudent);
 
 exports.default = app;

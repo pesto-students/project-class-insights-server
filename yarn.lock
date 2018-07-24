@@ -332,6 +332,10 @@ async-limiter@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/async-limiter/-/async-limiter-1.0.0.tgz#78faed8c3d074ab81f22b4e985d79e8738f720f8"
 
+async-polling@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/async-polling/-/async-polling-0.2.1.tgz#366175d72dda951fb1c148d0d9edf7412cb02d78"
+
 async@2.1.4:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/async/-/async-2.1.4.tgz#2d2160c7788032e4dd6cbe2502f1f9a2c8f6cde4"

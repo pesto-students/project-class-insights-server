@@ -10,21 +10,10 @@ var _feedbackSubmission2 = _interopRequireDefault(_feedbackSubmission);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const getBatches = async (req, res) => {
-  const limit = Number(req.query.limit) || 5;
-  const asc = 1;
-  const query = _feedbackSubmission2.default.find({ email: req.body.email }, { batchId: '' }, { sort: { batchId: asc } }).limit(Number(limit));
-  await query.exec((err, submittedFeedbackForm) => {
-    if (err) {
-      res.json({ error: err.message });
-    }
-    res.json({ submittedFeedbackForm });
-  });
-};
-
-const getClassesFeedback = async (req, res) => {
+const getBatchesFeedback = async (req, res) => {
   const limit = Number(req.query.limit) || 5;
   const desc = -1;
+  console.log(req.query);
   const query = _feedbackSubmission2.default.find({}, { date: '' }, { sort: { date: desc } }).limit(Number(limit));
   await query.exec((err, submittedFeedbackForm) => {
     if (err) {
@@ -34,7 +23,7 @@ const getClassesFeedback = async (req, res) => {
   });
 };
 
-const getThisDayClassFeedback = async (req, res) => {
+const getDayBatchFeedback = async (req, res) => {
   const limit = Number(req.query.limit) || 5;
   const { date } = req.query;
   const desc = -1;
@@ -48,7 +37,6 @@ const getThisDayClassFeedback = async (req, res) => {
 };
 
 exports.default = {
-  getClassesFeedback,
-  getThisDayClassFeedback,
-  getBatches
+  getBatchesFeedback,
+  getDayBatchFeedback
 };

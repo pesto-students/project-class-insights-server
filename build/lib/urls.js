@@ -19,5 +19,8 @@ exports.default = {
   anyDayFeedback: '/lastclass',
   getBatches: '/getBatches',
   emailConfirmation: '/confirmation',
-  resendToken: '/resend'
+  resendToken: '/resend',
+  batches: '/batches',
+  feedbacks: '/feedbacks',
+  students: '/students'
 };

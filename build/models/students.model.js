@@ -12,31 +12,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const { Schema } = _mongoose2.default;
 
-const UserBatchSchema = _mongoose2.default.Schema({
-  instructorId: {
-    type: Schema.Types.ObjectId,
-    ref: 'instructorModel',
-    required: true
-  },
+const StudentSchema = _mongoose2.default.Schema({
   batchId: {
+    type: Schema.Types.ObjectId,
+    ref: 'userBatchModel'
+    // unique: true,
+  },
+  name: {
     type: String,
-    required: true,
-    unique: true
-  },
-  from: {
-    type: Date,
     required: true
   },
-  to: {
-    type: Date,
-    required: true
-  },
-  status: {
-    type: Boolean,
+  studentObjectId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true
   }
-});
+}, { strict: false });
 
-const UserBatchModel = _mongoose2.default.model('userBatchModel', UserBatchSchema);
+const StudentModel = _mongoose2.default.model('studentModel', StudentSchema);
 
-exports.default = UserBatchModel;
+exports.default = StudentModel;

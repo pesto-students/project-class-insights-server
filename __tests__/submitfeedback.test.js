@@ -107,5 +107,5 @@ describe('Testing feedback submission', () => {
     const response = await request(app).post(URLS.submitfeedback).send(newFeedback);
     expect(response.body.success).toBe('feedback submitted successfully');
     expect(response.statusCode).toBe(200);
-  });
+  }, 10000);
 });
