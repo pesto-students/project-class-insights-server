@@ -32,7 +32,7 @@ describe('APIs to get form', () => {
   test('should return an form object with same form id as requested', async () => {
     const response = await request(app).get(`${URLS.getFormById}/${formId}`);
     expect(response.body._id).toBe(formId);
-  });
+  }, 10000);
 
   test('should return an array of 5 forms when no limit is provided', async () => {
     const response = await request(app).get(URLS.getForm);

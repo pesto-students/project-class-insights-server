@@ -2,12 +2,14 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import mongoose from 'mongoose';
+import AsyncPolling from 'async-polling';
 
 import config from './config/express';
 
 
 import CONSTANTS from './lib/constants';
 import URLS from './lib/urls';
+import userConstants from './lib/userConstants';
 // Import all models
 import UserModel from './models/user.model';
 
@@ -20,7 +22,10 @@ import signupController from './controllers/signupController';
 import submitformController from './controllers/submitformController';
 import submitfeedbackController from './controllers/submitfeedbackController';
 import getFormController from './controllers/getFromController';
-import classesController from './controllers/classes.controller';
+import batchesController from './controllers/batches.controller';
+import feedbacksController from './controllers/feedbacks.controller';
+import studentController from './controllers/students.controller';
+import batchUpdater from './helpers/batchUpdater';
 
 dotenv.config();
 
@@ -69,16 +74,29 @@ app.get('/setup', async (req, res) => {
   }
 });
 
+const poll = AsyncPolling((end) => {
+  batchUpdater.updateStudentCount();
+  end();
+}, userConstants.WAIT_TIME);
+poll.on('error', () => { console.log('error in poll'); });
+
+poll.run();
+
 app.post(URLS.login, AuthController.login);
 app.post(URLS.signup, signupController.signup);
 app.post(URLS.submitform, submitformController.submit);
 app.post(URLS.submitfeedback, submitfeedbackController.submitfeedback);
 app.get(`${URLS.getFormById}/:id`, getFormController.getFormById);
 app.get(URLS.getForm, getFormController.getForm);
-app.get(URLS.allClassesFeedback, classesController.getClassesFeedback);
-app.get(URLS.anyDayFeedback, classesController.getThisDayClassFeedback);
 app.get(`${URLS.emailConfirmation}/:token`, signupController.confirmation);
 app.post(URLS.resendToken, signupController.resendToken);
 app.get(URLS.getLatestForm, getFormController.getLatestForm);
+app.get(`${URLS.batches}/:id`, batchesController.getBatches);
+app.post(URLS.batches, batchesController.createBatch);
+app.get(URLS.feedbacks, feedbacksController.getBatchesFeedback);
+app.patch(URLS.batches, batchesController.editBatch);
+app.delete(URLS.batches, batchesController.deleteBatch);
+app.get(URLS.batches, batchesController.getBatchesMain);
+app.post(URLS.students, studentController.createStudent);
 
 export default app;

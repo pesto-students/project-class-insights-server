@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _mongoose = require('mongoose');
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
 var _user = require('../models/user.model');
 
 var _user2 = _interopRequireDefault(_user);
@@ -20,16 +24,23 @@ var _studentInvite = require('../models/studentInvite.model');
 
 var _studentInvite2 = _interopRequireDefault(_studentInvite);
 
+var _instructor = require('./instructor.controller');
+
+var _instructor2 = _interopRequireDefault(_instructor);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* eslint no-underscore-dangle: 0 */
 const signup = async (req, res) => {
+  const _id = new _mongoose2.default.Types.ObjectId();
   const newUser = new _user2.default({
+    _id,
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     isInstructor: req.body.isInstructor
   });
+  req._id = _id;
   try {
     if (newUser.isInstructor === false) {
       const student = await _studentInvite2.default.findOne({ email: newUser.email });
@@ -40,6 +51,8 @@ const signup = async (req, res) => {
       }
     }
     const savedUser = await newUser.save();
+    // set depending on the flag isInstructor to be true or false, else create student
+    _instructor2.default.createInstructor(req, res);
     await (0, _triggerEmailVerification2.default)(req, savedUser);
     console.log('User saved successfully');
     res.json({ success: 'user registration successful' });

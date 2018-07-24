@@ -65,5 +65,5 @@ describe('Feedback form creation', () => {
     const response = await request(app).post(URLS.submitform).send(newForm);
     expect(response.body.success).toBe('Form saved successfully');
     expect(response.statusCode).toBe(200);
-  });
+  }, 10000);
 });

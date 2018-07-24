@@ -23,7 +23,6 @@ const getFormById = async (req, res) => {
 };
 
 const getForm = async (req, res) => {
-  console.log(req.headers.authorization);
   const limit = Number(req.query.limit) || 5;
   const sort = Number(req.query.sort) || -1;
   const query = _feedbackform2.default.find({}, {}, { sort: { date: sort } }).limit(Number(limit));
