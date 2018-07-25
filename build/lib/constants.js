@@ -1,8 +1,18 @@
-import dotenv from 'dotenv';
+'use strict';
 
-dotenv.config();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-export default {
+var _dotenv = require('dotenv');
+
+var _dotenv2 = _interopRequireDefault(_dotenv);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_dotenv2.default.config();
+
+exports.default = {
   PORT: process.env.PORT || 3000,
   NODE_ENV: process.env.NODE_ENV || 'development',
   DB_DIALECT: process.env.DB_DIALECT || 'mongo',
@@ -15,5 +25,5 @@ export default {
   JWT_ENCRYPTION: process.env.JWT_ENCRYPTION || 'MySecret',
   JWT_EXPIRATION: process.env.JWT_EXPIRATION || '12h',
   SENDGRID_USER: process.env.SENDGRID_USER,
-  SENDGRID_APIKEY: process.env.SENDGRID_APIKEY,
+  SENDGRID_APIKEY: process.env.SENDGRID_APIKEY
 };

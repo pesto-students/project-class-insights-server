@@ -6,10 +6,10 @@
   "author": "monisahmad <monis.ahmad42@gmail.com>, Aditya Kumar Khare <aditya85d@gmail.com> , Kundan Singh <kundanvishen@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "rm -rf build && babel src -d build && node ./build/index.js",
+    "start": "node ./build/index.js",
     "start:babel": "babel-node -- ./src/index.js",
     "build": "rm -rf build && babel src -d build",
-    "start:babel-dev": "nodemon --exec babel-node -- index.js",
+    "start:babel-dev": "nodemon --exec babel-node -- ./src/index.js",
     "start:dev": "nodemon index.js",
     "precommit": "lint-staged && yarn test",
     "test": "yarn lint && jest",
