@@ -52,5 +52,8 @@
   "jest": {
     "testEnvironment": "node",
     "verbose": true
+  },
+  "engines": {
+    "node": "9.11"
   }
 }
