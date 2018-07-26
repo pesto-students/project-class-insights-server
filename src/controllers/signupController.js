@@ -2,6 +2,7 @@
 import UserModel from '../models/user.model';
 import triggerEmailVerification from '../helpers/triggerEmailVerification';
 import EmailVerify from '../models/emailVerification.model';
+import StudentInvite from '../models/studentInvite.model';
 
 
 const signup = async (req, res) => {
@@ -9,9 +10,17 @@ const signup = async (req, res) => {
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
+    isInstructor: req.body.isInstructor,
   });
-
   try {
+    if (newUser.isInstructor === false) {
+      const student = await StudentInvite.findOne({ email: newUser.email });
+      if (!student) {
+        res.status(422);
+        res.json({ error: "You've not been invited " });
+        return;
+      }
+    }
     const savedUser = await newUser.save();
     await triggerEmailVerification(req, savedUser);
     console.log('User saved successfully');
@@ -46,6 +55,7 @@ const confirmation = async (req, res) => {
         type: 'not-verified',
         msg: 'We were unable to find a valid token. Your token may have expired.',
       });
+      return;
     }
     const user = await UserModel.findByIdAndUpdate(
       emailVerify._userId,

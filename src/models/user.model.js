@@ -28,6 +28,7 @@ const Schema = mongoose.Schema(
       minlength: 8,
       required: true,
     },
+    isInstructor: Boolean,
     created_at: { type: Date, default: Date.now },
     isVerified: { type: Boolean, default: false },
   },
