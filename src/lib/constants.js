@@ -16,4 +16,5 @@ export default {
   JWT_EXPIRATION: process.env.JWT_EXPIRATION || '12h',
   SENDGRID_USER: process.env.SENDGRID_USER,
   SENDGRID_APIKEY: process.env.SENDGRID_APIKEY,
+  FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:8080',
 };

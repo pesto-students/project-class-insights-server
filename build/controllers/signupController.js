@@ -16,16 +16,29 @@ var _emailVerification = require('../models/emailVerification.model');
 
 var _emailVerification2 = _interopRequireDefault(_emailVerification);
 
+var _studentInvite = require('../models/studentInvite.model');
+
+var _studentInvite2 = _interopRequireDefault(_studentInvite);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint no-underscore-dangle: 0 */
 const signup = async (req, res) => {
   const newUser = new _user2.default({
     name: req.body.name,
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    isInstructor: req.body.isInstructor
   });
-
   try {
+    if (newUser.isInstructor === false) {
+      const student = await _studentInvite2.default.findOne({ email: newUser.email });
+      if (!student) {
+        res.status(422);
+        res.json({ error: "You've not been invited " });
+        return;
+      }
+    }
     const savedUser = await newUser.save();
     await (0, _triggerEmailVerification2.default)(req, savedUser);
     console.log('User saved successfully');
@@ -49,8 +62,7 @@ const signup = async (req, res) => {
     }
     console.log(error.message);
   }
-}; /* eslint no-underscore-dangle: 0 */
-
+};
 
 const confirmation = async (req, res) => {
   try {
@@ -61,6 +73,7 @@ const confirmation = async (req, res) => {
         type: 'not-verified',
         msg: 'We were unable to find a valid token. Your token may have expired.'
       });
+      return;
     }
     const user = await _user2.default.findByIdAndUpdate(emailVerify._userId, { $set: { isVerified: true } }, { new: true });
     if (!user) {
