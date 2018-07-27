@@ -57,7 +57,6 @@ const createBatch = async (req, res) => {
   } = req.body;
   const getInstructorId = await UserSchema.findOne({ email }, { _id: 1 });
   const instructorId = await InstructorModel.findOne({ loginId: getInstructorId }, { _id: 1 });
-  console.log(instructorId);
   const newBatch = new UserBatchModel({
     _id: new mongoose.Types.ObjectId(),
     instructorId,

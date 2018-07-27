@@ -6,19 +6,19 @@ const StudentSchema = mongoose.Schema({
   batchId: {
     type: Schema.Types.ObjectId,
     ref: 'userBatchModel',
-    // unique: true,
   },
   name: {
     type: String,
-    required: true,
+    default: '',
   },
   studentObjectId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
+    default: new mongoose.Types.ObjectId(),
   },
+  email: String,
 }, { strict: false });
 
-const StudentModel = mongoose.model('studentModel', StudentSchema);
+const StudentModel = mongoose.model('studentsModel', StudentSchema);
 
 export default StudentModel;

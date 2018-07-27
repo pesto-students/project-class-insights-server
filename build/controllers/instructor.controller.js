@@ -25,14 +25,17 @@ const createInstructor = async (namePassed, _id) => {
   }
 };
 
-const addNewBatch = async (_id, loginId) => {
-  await _instructor2.default.findOneAndUpdate({ loginId }, { $addToSet: { batches: _id } }, err => {
+const addNewBatch = async (batchesId, InstructorId) => {
+  const batches = batchesId;
+  const id = InstructorId;
+  await _instructor2.default.findOneAndUpdate({ _id: id }, { $addToSet: { batches } }, err => {
     if (err) {
       console.log('error in adding new batch to the instructor model');
     }
   });
 };
 
+// delete from instructor
 exports.default = {
   createInstructor,
   addNewBatch
