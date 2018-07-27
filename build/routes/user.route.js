@@ -23,13 +23,9 @@ var _urls2 = _interopRequireDefault(_urls);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const userRoutes = _express2.default.Router();
-// import batchesController from '../controllers/batches.controller';
-
 
 userRoutes.use(_urls2.default.home, _auth2.default.ensureAuthenticated);
 
 userRoutes.post(_urls2.default.home, _user2.default.getAllUsers);
-
-// userRoutes.post(URLS.batches, batchesController.batches);
 
 exports.default = userRoutes;
