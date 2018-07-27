@@ -29,6 +29,6 @@ const Instructor = _mongoose2.default.Schema({
   }
 });
 
-const InstructorModel = _mongoose2.default.model('instructorModel', Instructor);
+const InstructorModel = _mongoose2.default.model('instructorsModel', Instructor);
 
 exports.default = InstructorModel;

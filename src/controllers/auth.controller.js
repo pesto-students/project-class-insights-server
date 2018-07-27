@@ -19,7 +19,7 @@ const login = async (req, res) => {
 
     if (!user.isVerified) {
       res.status(401);
-      res.json({ type: 'not-verified', msg: 'Your account has not been verified.' });
+      res.json({ success: false, message: 'Your account has not been verified.' });
       return;
     }
     // check if correct password
@@ -31,7 +31,10 @@ const login = async (req, res) => {
         });
       } else {
         // correct password, create token
-        const payload = { email: req.body.email };
+        const payload = {
+          email: user.email,
+          isInstructor: user.isInstructor,
+        };
         const token = jwt.sign(payload, CONSTANTS.JWT_ENCRYPTION, {
           expiresIn: CONSTANTS.JWT_EXPIRATION, // expires in 12 hours
         });

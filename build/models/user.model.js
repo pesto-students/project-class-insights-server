@@ -17,10 +17,6 @@ var _validator = require('validator');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const Schema = _mongoose2.default.Schema({
-  name: {
-    type: String,
-    required: true
-  },
   email: {
     type: String,
     lowercase: true,

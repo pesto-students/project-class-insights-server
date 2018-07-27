@@ -10,8 +10,8 @@ var _instructor2 = _interopRequireDefault(_instructor);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const createInstructor = async (req, res) => {
-  const { name, _id } = req.body;
+const createInstructor = async (namePassed, _id) => {
+  const name = namePassed;
   const loginId = _id;
   const newInstructor = new _instructor2.default({
     name,
@@ -19,8 +19,8 @@ const createInstructor = async (req, res) => {
   });
   try {
     await newInstructor.save();
-    res.json({ message: 'done instructor' });
   } catch (error) {
+    console.log(error);
     console.log('error in creating instructor');
   }
 };

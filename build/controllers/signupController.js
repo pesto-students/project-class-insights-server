@@ -28,19 +28,21 @@ var _instructor = require('./instructor.controller');
 
 var _instructor2 = _interopRequireDefault(_instructor);
 
+var _constants = require('../lib/constants');
+
+var _constants2 = _interopRequireDefault(_constants);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* eslint no-underscore-dangle: 0 */
 const signup = async (req, res) => {
   const _id = new _mongoose2.default.Types.ObjectId();
+  const { name } = req.body;
   const newUser = new _user2.default({
     _id,
-    name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     isInstructor: req.body.isInstructor
   });
-  req._id = _id;
   try {
     if (newUser.isInstructor === false) {
       const student = await _studentInvite2.default.findOne({ email: newUser.email });
@@ -52,7 +54,7 @@ const signup = async (req, res) => {
     }
     const savedUser = await newUser.save();
     // set depending on the flag isInstructor to be true or false, else create student
-    _instructor2.default.createInstructor(req, res);
+    _instructor2.default.createInstructor(name, _id);
     await (0, _triggerEmailVerification2.default)(req, savedUser);
     console.log('User saved successfully');
     res.json({ success: 'user registration successful' });
@@ -75,7 +77,8 @@ const signup = async (req, res) => {
     }
     console.log(error.message);
   }
-};
+}; /* eslint no-underscore-dangle: 0 */
+
 
 const confirmation = async (req, res) => {
   try {
@@ -94,7 +97,7 @@ const confirmation = async (req, res) => {
       res.json({ type: 'not-verified', msg: 'We were unable to find user for this token.' });
     }
     if (user.isVerified) {
-      res.json({ type: 'verified', msg: 'Email has been successfully verified' });
+      res.redirect(_constants2.default.FRONTEND_URL);
     }
   } catch (error) {
     res.status(500);

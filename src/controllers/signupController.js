@@ -6,6 +6,7 @@ import triggerEmailVerification from '../helpers/triggerEmailVerification';
 import EmailVerify from '../models/emailVerification.model';
 import StudentInvite from '../models/studentInvite.model';
 import instructorController from './instructor.controller';
+import CONSTANTS from '../lib/constants';
 
 
 const signup = async (req, res) => {
@@ -74,7 +75,7 @@ const confirmation = async (req, res) => {
       res.json({ type: 'not-verified', msg: 'We were unable to find user for this token.' });
     }
     if (user.isVerified) {
-      res.json({ type: 'verified', msg: 'Email has been successfully verified' });
+      res.redirect(CONSTANTS.FRONTEND_URL);
     }
   } catch (error) {
     res.status(500);
