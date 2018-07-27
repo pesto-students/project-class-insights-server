@@ -25,6 +25,10 @@ const UserBatchSchema = mongoose.Schema({
     type: Boolean,
     required: true,
   },
+  studentCount: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const UserBatchModel = mongoose.model('userBatchModel', UserBatchSchema);

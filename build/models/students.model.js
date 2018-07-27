@@ -16,19 +16,19 @@ const StudentSchema = _mongoose2.default.Schema({
   batchId: {
     type: Schema.Types.ObjectId,
     ref: 'userBatchModel'
-    // unique: true,
   },
   name: {
     type: String,
-    required: true
+    default: ''
   },
   studentObjectId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: true
-  }
+    default: new _mongoose2.default.Types.ObjectId()
+  },
+  email: String
 }, { strict: false });
 
-const StudentModel = _mongoose2.default.model('studentModel', StudentSchema);
+const StudentModel = _mongoose2.default.model('studentsModel', StudentSchema);
 
 exports.default = StudentModel;

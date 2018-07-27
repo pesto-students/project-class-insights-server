@@ -34,6 +34,10 @@ const UserBatchSchema = _mongoose2.default.Schema({
   status: {
     type: Boolean,
     required: true
+  },
+  studentCount: {
+    type: Number,
+    default: 0
   }
 });
 

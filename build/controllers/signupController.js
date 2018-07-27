@@ -32,16 +32,23 @@ var _constants = require('../lib/constants');
 
 var _constants2 = _interopRequireDefault(_constants);
 
+var _students = require('./students.controller');
+
+var _students2 = _interopRequireDefault(_students);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint no-underscore-dangle: 0 */
 const signup = async (req, res) => {
   const _id = new _mongoose2.default.Types.ObjectId();
-  const { name } = req.body;
+  const {
+    name, isInstructor, email, password
+  } = req.body;
   const newUser = new _user2.default({
     _id,
-    email: req.body.email,
-    password: req.body.password,
-    isInstructor: req.body.isInstructor
+    email,
+    password,
+    isInstructor
   });
   try {
     if (newUser.isInstructor === false) {
@@ -54,7 +61,11 @@ const signup = async (req, res) => {
     }
     const savedUser = await newUser.save();
     // set depending on the flag isInstructor to be true or false, else create student
-    _instructor2.default.createInstructor(name, _id);
+    if (isInstructor) {
+      _instructor2.default.createInstructor(name, _id);
+    } else {
+      _students2.default.passTheStudentId(name, _id, req.body.email);
+    }
     await (0, _triggerEmailVerification2.default)(req, savedUser);
     console.log('User saved successfully');
     res.json({ success: 'user registration successful' });
@@ -77,8 +88,7 @@ const signup = async (req, res) => {
     }
     console.log(error.message);
   }
-}; /* eslint no-underscore-dangle: 0 */
-
+};
 
 const confirmation = async (req, res) => {
   try {

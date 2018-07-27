@@ -94,7 +94,7 @@ app.get(URLS.getLatestForm, getFormController.getLatestForm);
 app.get(`${URLS.batches}/:id`, batchesController.getBatches);
 app.post(URLS.batches, batchesController.createBatch);
 app.get(URLS.feedbacks, feedbacksController.getBatchesFeedback);
-app.patch(URLS.batches, batchesController.editBatch);
+app.patch(`${URLS.batches}/:id`, batchesController.editBatch);
 app.delete(URLS.batches, batchesController.deleteBatch);
 app.get(URLS.batches, batchesController.getBatchesMain);
 app.post(URLS.students, studentController.createStudent);

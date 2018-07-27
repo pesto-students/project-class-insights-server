@@ -67,7 +67,6 @@ const createBatch = async (req, res) => {
   } = req.body;
   const getInstructorId = await _user2.default.findOne({ email }, { _id: 1 });
   const instructorId = await _instructor4.default.findOne({ loginId: getInstructorId }, { _id: 1 });
-  console.log(instructorId);
   const newBatch = new _batches2.default({
     _id: new _mongoose2.default.Types.ObjectId(),
     instructorId,

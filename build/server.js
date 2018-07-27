@@ -154,7 +154,7 @@ app.get(_urls2.default.getLatestForm, _getFromController2.default.getLatestForm)
 app.get(`${_urls2.default.batches}/:id`, _batches2.default.getBatches);
 app.post(_urls2.default.batches, _batches2.default.createBatch);
 app.get(_urls2.default.feedbacks, _feedbacks2.default.getBatchesFeedback);
-app.patch(_urls2.default.batches, _batches2.default.editBatch);
+app.patch(`${_urls2.default.batches}/:id`, _batches2.default.editBatch);
 app.delete(_urls2.default.batches, _batches2.default.deleteBatch);
 app.get(_urls2.default.batches, _batches2.default.getBatchesMain);
 app.post(_urls2.default.students, _students2.default.createStudent);

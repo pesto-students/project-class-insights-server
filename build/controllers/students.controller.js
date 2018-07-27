@@ -16,38 +16,47 @@ var _batches = require('../models/batches.model');
 
 var _batches2 = _interopRequireDefault(_batches);
 
+var _triggerStudentInvite = require('../helpers/triggerStudentInvite');
+
+var _triggerStudentInvite2 = _interopRequireDefault(_triggerStudentInvite);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const createStudent = async (req, res) => {
   const {
-    name, batchId, studentObjectId
+    email, batchId
   } = req.body;
   const realBatchId = await _batches2.default.findOne({ batchId }, { _id: 1 });
   const newStudent = new _students2.default({
-    name,
-    batchId: realBatchId.id,
-    studentObjectId
+    email,
+    batchId: realBatchId.id
   });
   try {
-    await newStudent.save();
-    try {
-      // error
-      _batches2.default.findOneAndUpdate({ batchId }, { $inc: { studentCount: 1 } }, err => {
-        if (err) res.json({ error: 'Error updating' });
-        res.json({ success: 'Successfully updated' });
-      });
-    } catch (error) {
-      res.json({ error: 'error at update' });
-    }
+    const savedStudent = await newStudent.save();
+    await (0, _triggerStudentInvite2.default)(savedStudent);
 
     _batchUpdater2.default.updateStudentCount();
     console.log('Student added to the batch');
     res.json({ success: 'Student created and added to the batchId' });
   } catch (error) {
+    console.log(error);
     res.json({ error: 'Error creating students' });
   }
 };
 
+const passTheStudentId = async (namePassed, id, emailMatcher) => {
+  const studentObjectId = id;
+  const name = namePassed;
+  const email = emailMatcher;
+  try {
+    await _students2.default.findOneAndUpdate({ email }, { name, studentObjectId });
+    console.log('successfully updated the right student reference');
+  } catch (error) {
+    console.log('error at passing the right student reference');
+  }
+};
+
 exports.default = {
-  createStudent
+  createStudent,
+  passTheStudentId
 };
