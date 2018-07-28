@@ -7,6 +7,7 @@ const existingUser = {
   email: 'theo@afc.com',
   password: 'password',
   name: 'theo',
+  isInstructor: true,
 };
 const incompleteUser = {
   password: 'password',
@@ -35,6 +36,7 @@ describe('POST / sends response', () => {
 
   test('should respond with email already registered already existing user', async () => {
     const response = await request(app).post(URLS.signup).send(existingUser);
+    console.log(response);
     expect(response.body.error).toBe('email already registered');
     expect(response.statusCode).toBe(422);
   }, 10000);

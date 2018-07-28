@@ -30,16 +30,28 @@ const signup = async (req, res) => {
         return;
       }
     }
-    const savedUser = await newUser.save();
-    // set depending on the flag isInstructor to be true or false, else create student
-    if (isInstructor) {
-      instructorController.createInstructor(name, _id);
+    let savedUser;
+    if (!isInstructor) {
+      const user = await UserModel.findOne({ email }, {});
+      // console.log(user._id);
+      if (user) {
+        const userId = user._id;
+        studentsController.passTheStudentId(name, userId, req.body.email);
+        res.json({ success: 'registration successful for another batch' });
+      } else {
+        savedUser = await newUser.save();
+        studentsController.passTheStudentId(name, _id, req.body.email);
+        await triggerEmailVerification(req, savedUser);
+        res.json({ success: 'user registration successful' });
+      }
     } else {
-      studentsController.passTheStudentId(name, _id, req.body.email);
+      savedUser = await newUser.save();
+      instructorController.createInstructor(name, _id);
+      await triggerEmailVerification(req, savedUser);
+      res.json({ success: 'user registration successful' });
+    // set depending on the flag isInstructor to be true or false, else create student
     }
-    await triggerEmailVerification(req, savedUser);
     console.log('User saved successfully');
-    res.json({ success: 'user registration successful' });
   } catch (error) {
     if (error.message.includes('11000')) {
       res.status(422);

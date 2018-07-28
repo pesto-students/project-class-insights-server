@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const StudentSchema = mongoose.Schema({
   batchId: {
-    type: Schema.Types.ObjectId,
+    type: [Schema.Types.ObjectId],
     ref: 'userBatchModel',
   },
   name: {

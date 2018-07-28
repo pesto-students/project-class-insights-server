@@ -1,13 +1,12 @@
 import mongoose from 'mongoose';
 
+const { Schema } = mongoose;
+
 const subtopic = mongoose.Schema({
   subtopicName: String,
   rating: [Number],
 });
 
-const comment = mongoose.Schema({
-  commentMessage: String,
-});
 
 const feedbackFormSchema = mongoose.Schema({
   date: { type: Date, default: Date.now },
@@ -20,16 +19,18 @@ const feedbackFormSchema = mongoose.Schema({
     required: true,
   },
   subtopics: [subtopic],
-  comments: [comment],
   creationDate: {
-    type: String,
+    type: Date,
   },
   batchId: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'userBatchModel',
     required: true,
   },
-  email: {
-    type: String,
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
   },
 });
 

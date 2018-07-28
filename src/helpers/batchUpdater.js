@@ -3,15 +3,16 @@ import StudentModel from '../models/students.model';
 
 const updateStudentCount = async () => {
   const results = await StudentModel.find({}, {});
-
+  console.log(results);
   const map = results.reduce((acc, ele) => {
-    if (!acc[ele.batchId]) {
-      acc[ele.batchId] = 0;
-    }
-    acc[ele.batchId] += 1;
+    (ele.batchId).forEach((ele2) => {
+      if (!acc[ele2]) {
+        acc[ele2] = 0;
+      }
+      acc[ele2] += 1;
+    });
     return acc;
   }, {});
-
   if (map) {
     Object.keys(map).reduce(async (acc, ele) => {
       const studentCount = map[ele];

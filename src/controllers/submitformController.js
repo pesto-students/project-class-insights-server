@@ -1,12 +1,29 @@
 import FeedbackformModel from '../models/feedbackform.model';
+import UserSchema from '../models/user.model';
+import UserBatchModel from '../models/batches.model';
+import analyseFeedbacks from '../helpers/analyseFeedbacks';
 
 const submit = async (req, res) => {
+  const { batchId, date } = req.body;
+  const { email } = req.decoded;
+  let userId;
+  let batchIdRef;
+  try {
+    const getUserId = await UserSchema.findOne({ email }, { _id: 1 });
+    const batchReferenceId = await UserBatchModel.findOne({ batchId }, { _id: 1 });
+    userId = getUserId;
+    batchIdRef = batchReferenceId;
+  } catch (error) {
+    console.error('error at creating form');
+    res.json({ error: 'batch does not exist' });
+  }
+
   const newForm = new FeedbackformModel({
     subject: req.body.subject,
     topic: req.body.topic,
-    creationDate: req.body.creationDate,
-    batchId: req.body.batchId,
-    email: req.body.email,
+    creationDate: new Date(date),
+    batchId: batchIdRef,
+    userId,
     subtopics: req.body.subtopics.reduce((acc, curr) => {
       return [...acc, { subtopicName: curr.subtopicName },
       ];
@@ -14,6 +31,7 @@ const submit = async (req, res) => {
   });
   try {
     await newForm.save();
+    analyseFeedbacks.setInitialResults();
     console.log('form successfully saved');
     res.json({ success: 'Form saved successfully' });
   } catch (error) {

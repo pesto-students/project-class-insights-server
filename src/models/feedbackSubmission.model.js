@@ -5,11 +5,13 @@ const subtopic = mongoose.Schema({
   rating: Number,
 });
 
+const { Schema } = mongoose;
 
 const feedbackSubmissionSchema = mongoose.Schema({
   date: { type: Date, default: Date.now },
   feedbackForm_ID: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'feedbackFormModel',
     required: true,
   },
   subject: {
@@ -21,14 +23,17 @@ const feedbackSubmissionSchema = mongoose.Schema({
     required: true,
   },
   creationDate: {
-    type: String,
+    type: Date,
     required: true,
   },
   email: {
     type: String,
     required: true,
   },
-  batchId: String,
+  batchId: {
+    type: Schema.Types.ObjectId,
+    ref: 'userBatchModel',
+  },
   subtopics: [subtopic],
   comments: String,
 });
