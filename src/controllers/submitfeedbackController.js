@@ -1,14 +1,20 @@
+import mongoose from 'mongoose';
 /* eslint no-underscore-dangle: 0 */
 import FeedbackSubmissionModel from '../models/feedbackSubmission.model';
+import analyseFeedbacks from '../helpers/analyseFeedbacks';
+
 
 const submitfeedback = async (req, res) => {
+  const { batchId } = req.body;
+  const { email } = req.decoded;
+  const refFeedbackObjectId = mongoose.Types.ObjectId(req.body._id);
   const newFeedback = new FeedbackSubmissionModel({
-    feedbackForm_ID: req.body._id,
+    feedbackForm_ID: refFeedbackObjectId,
     subject: req.body.subject,
     creationDate: req.body.creationDate,
     topic: req.body.topic,
-    email: req.body.email,
-    batchId: req.body.batchId,
+    email,
+    batchId,
     subtopics: req.body.subtopics.reduce((acc, curr) => {
       return [...acc, {
         subtopicName: curr.subtopicName,
@@ -20,6 +26,7 @@ const submitfeedback = async (req, res) => {
   });
   try {
     await newFeedback.save();
+    analyseFeedbacks.analyseFeedbacks();
     console.log('feedback submitted');
     res.json({ success: 'feedback submitted successfully' });
   } catch (error) {

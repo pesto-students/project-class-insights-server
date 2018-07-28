@@ -7,33 +7,31 @@ import InstructorModel from '../models/instructor.model';
 
 
 const getBatches = async (req, res) => {
-  const limit = Number(req.query.limit) || 5;
   const asc = 1;
   console.log(req.query);
+  const { email } = req.decoded;
+  console.log(email);
+  const getInstructorId = await UserSchema.findOne({ email }, { _id: 1 });
+  const instructorId = await InstructorModel.findOne({ loginId: getInstructorId }, { _id: 1 });
+  console.log(instructorId);
   const query = UserBatchModel.find(
-    {}, {},
+    { instructorId }, {},
     { sort: { batchId: asc } },
   )
-    .limit(Number(limit))
     .populate('instructorId', 'name');
   await query.exec((err, Batches) => {
     if (err) {
       res.json({ error: err.message });
+    } else {
+      res.json({ Batches });
     }
-    res.json({ Batches });
   });
 };
 
 const getBatchById = async (req, res) => {
-  const limit = Number(req.query.limit) || 5;
-  const asc = 1;
   console.log(req.query);
   const { batchId } = req.query;
-  const query = UserBatchModel.find(
-    { batchId }, {},
-    { sort: { batchId: asc } },
-  )
-    .limit(Number(limit))
+  const query = UserBatchModel.find({ batchId }, {})
     .populate('instructorId', 'name');
   await query.exec((err, Batches) => {
     if (err) {
@@ -53,8 +51,9 @@ const getBatchesMain = async (req, res) => {
 
 const createBatch = async (req, res) => {
   const {
-    batchId, email, from, to, status,
+    batchId, from, to, status,
   } = req.body;
+  const { email } = req.decoded;
   const getInstructorId = await UserSchema.findOne({ email }, { _id: 1 });
   const instructorId = await InstructorModel.findOne({ loginId: getInstructorId }, { _id: 1 });
   const newBatch = new UserBatchModel({

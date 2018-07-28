@@ -1,5 +1,7 @@
 import FeedbackSubmissionModel from '../models/feedbackSubmission.model';
 
+// For Instructor
+
 const getBatchesFeedback = async (req, res) => {
   const limit = Number(req.query.limit) || 5;
   const desc = -1;
@@ -27,6 +29,8 @@ const getDayBatchFeedback = async (req, res) => {
     res.json(submittedFeedbackForm);
   });
 };
+
+// For Students
 
 export default {
   getBatchesFeedback,
