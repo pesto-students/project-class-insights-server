@@ -11,7 +11,6 @@ const getBatches = async (req, res) => {
   const { email } = req.decoded;
   const getInstructorId = await UserSchema.findOne({ email }, { _id: 1 });
   const instructorId = await InstructorModel.findOne({ loginId: getInstructorId }, { _id: 1 });
-  console.log(instructorId);
   const query = UserBatchModel.find(
     { instructorId }, {},
     { sort: { batchId: asc } },

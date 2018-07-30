@@ -53,6 +53,12 @@ const makeObject = async singleForm => {
     responseObject.creationDate = feedbacks[0].creationDate;
     responseObject.comments = feedbacks.map(val => val.comments);
     responseObject.feedbackForm_ID = feedbacks[0].feedbackForm_ID;
+    responseObject.revisitCount = feedbacks.reduce((acc, ele) => {
+      if (ele.revisit) {
+        return acc + 1;
+      }
+      return acc;
+    }, 0);
     return responseObject;
   } catch (error) {
     console.log('error at poll in makeObject');

@@ -36,6 +36,10 @@ const feedbackSubmissionSchema = mongoose.Schema({
   },
   subtopics: [subtopic],
   comments: String,
+  revisit: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const FeedbackSubmissionModel = mongoose.model('feedbackSubmissionModel', feedbackSubmissionSchema);

@@ -90,7 +90,6 @@ app.get(`${URLS.getFormById}/:id`, getFormController.getFormById);
 app.get(`${URLS.emailConfirmation}/:token`, signupController.confirmation);
 app.post(URLS.resendToken, signupController.resendToken);
 app.get(URLS.getLatestForm, getFormController.getLatestForm);
-app.get(URLS.batches, batchesController.getBatchesMain);
 
 app.get(URLS.feedbacks, feedbacksController.getBatchesFeedback);
 app.patch(`${URLS.batches}/:id`, batchesController.editBatch);

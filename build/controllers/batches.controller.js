@@ -31,7 +31,6 @@ const getBatches = async (req, res) => {
   const { email } = req.decoded;
   const getInstructorId = await _user2.default.findOne({ email }, { _id: 1 });
   const instructorId = await _instructor4.default.findOne({ loginId: getInstructorId }, { _id: 1 });
-  console.log(instructorId);
   const query = _batches2.default.find({ instructorId }, {}, { sort: { batchId: asc } }).populate('instructorId', 'name');
   await query.exec((err, Batches) => {
     if (err) {

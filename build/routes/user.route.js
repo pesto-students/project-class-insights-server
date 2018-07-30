@@ -60,5 +60,6 @@ userRoutes.get(_urls2.default.batches, _batches2.default.getBatchesMain);
 userRoutes.post(_urls2.default.batches, _batches2.default.createBatch);
 userRoutes.post(_urls2.default.students, _students2.default.createStudent);
 userRoutes.get('/test', _dashboard2.default.getResults);
+userRoutes.delete(_urls2.default.students, _students2.default.deleteStudents);
 
 exports.default = userRoutes;
