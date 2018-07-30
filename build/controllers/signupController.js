@@ -59,16 +59,28 @@ const signup = async (req, res) => {
         return;
       }
     }
-    const savedUser = await newUser.save();
-    // set depending on the flag isInstructor to be true or false, else create student
-    if (isInstructor) {
-      _instructor2.default.createInstructor(name, _id);
+    let savedUser;
+    if (!isInstructor) {
+      const user = await _user2.default.findOne({ email }, {});
+      // console.log(user._id);
+      if (user) {
+        const userId = user._id;
+        _students2.default.passTheStudentId(name, userId, req.body.email);
+        res.json({ success: 'registration successful for another batch' });
+      } else {
+        savedUser = await newUser.save();
+        _students2.default.passTheStudentId(name, _id, req.body.email);
+        await (0, _triggerEmailVerification2.default)(req, savedUser);
+        res.json({ success: 'user registration successful' });
+      }
     } else {
-      _students2.default.passTheStudentId(name, _id, req.body.email);
+      savedUser = await newUser.save();
+      _instructor2.default.createInstructor(name, _id);
+      await (0, _triggerEmailVerification2.default)(req, savedUser);
+      res.json({ success: 'user registration successful' });
+      // set depending on the flag isInstructor to be true or false, else create student
     }
-    await (0, _triggerEmailVerification2.default)(req, savedUser);
     console.log('User saved successfully');
-    res.json({ success: 'user registration successful' });
   } catch (error) {
     if (error.message.includes('11000')) {
       res.status(422);

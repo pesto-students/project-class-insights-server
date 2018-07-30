@@ -52,14 +52,6 @@ var _signupController = require('./controllers/signupController');
 
 var _signupController2 = _interopRequireDefault(_signupController);
 
-var _submitformController = require('./controllers/submitformController');
-
-var _submitformController2 = _interopRequireDefault(_submitformController);
-
-var _submitfeedbackController = require('./controllers/submitfeedbackController');
-
-var _submitfeedbackController2 = _interopRequireDefault(_submitfeedbackController);
-
 var _getFromController = require('./controllers/getFromController');
 
 var _getFromController2 = _interopRequireDefault(_getFromController);
@@ -80,14 +72,18 @@ var _batchUpdater = require('./helpers/batchUpdater');
 
 var _batchUpdater2 = _interopRequireDefault(_batchUpdater);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _analyseFeedbacks = require('./helpers/analyseFeedbacks');
 
-// Import all routes
-_dotenv2.default.config();
+var _analyseFeedbacks2 = _interopRequireDefault(_analyseFeedbacks);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Import required controllers
 
 // Import all models
+_dotenv2.default.config();
+
+// Import all routes
 
 
 const { DB_URI } = _constants2.default;
@@ -144,19 +140,20 @@ poll.run();
 
 app.post(_urls2.default.login, _auth2.default.login);
 app.post(_urls2.default.signup, _signupController2.default.signup);
-app.post(_urls2.default.submitform, _submitformController2.default.submit);
-app.post(_urls2.default.submitfeedback, _submitfeedbackController2.default.submitfeedback);
+
 app.get(`${_urls2.default.getFormById}/:id`, _getFromController2.default.getFormById);
-app.get(_urls2.default.getForm, _getFromController2.default.getForm);
+
 app.get(`${_urls2.default.emailConfirmation}/:token`, _signupController2.default.confirmation);
 app.post(_urls2.default.resendToken, _signupController2.default.resendToken);
 app.get(_urls2.default.getLatestForm, _getFromController2.default.getLatestForm);
-app.get(`${_urls2.default.batches}/:id`, _batches2.default.getBatches);
-app.post(_urls2.default.batches, _batches2.default.createBatch);
+app.get(_urls2.default.batches, _batches2.default.getBatchesMain);
+
 app.get(_urls2.default.feedbacks, _feedbacks2.default.getBatchesFeedback);
 app.patch(`${_urls2.default.batches}/:id`, _batches2.default.editBatch);
 app.delete(_urls2.default.batches, _batches2.default.deleteBatch);
-app.get(_urls2.default.batches, _batches2.default.getBatchesMain);
-app.post(_urls2.default.students, _students2.default.createStudent);
+
+app.get(`${_urls2.default.students}/:id`, _students2.default.getStudents);
+
+app.get('/test', _analyseFeedbacks2.default.setInitialResults);
 
 exports.default = app;

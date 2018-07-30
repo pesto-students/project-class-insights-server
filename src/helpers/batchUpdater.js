@@ -3,7 +3,6 @@ import StudentModel from '../models/students.model';
 
 const updateStudentCount = async () => {
   const results = await StudentModel.find({}, {});
-  console.log(results);
   const map = results.reduce((acc, ele) => {
     (ele.batchId).forEach((ele2) => {
       if (!acc[ele2]) {
@@ -19,7 +18,7 @@ const updateStudentCount = async () => {
       try {
         await UserBatchModel.findOneAndUpdate({ _id: ele }, { studentCount });
       } catch (error) {
-        console.log('error');
+        console.log('error at student count updater');
       }
       return acc;
     }, {});

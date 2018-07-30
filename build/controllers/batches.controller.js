@@ -27,24 +27,24 @@ var _instructor4 = _interopRequireDefault(_instructor3);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const getBatches = async (req, res) => {
-  const limit = Number(req.query.limit) || 5;
   const asc = 1;
-  console.log(req.query);
-  const query = _batches2.default.find({}, {}, { sort: { batchId: asc } }).limit(Number(limit)).populate('instructorId', 'name');
+  const { email } = req.decoded;
+  const getInstructorId = await _user2.default.findOne({ email }, { _id: 1 });
+  const instructorId = await _instructor4.default.findOne({ loginId: getInstructorId }, { _id: 1 });
+  console.log(instructorId);
+  const query = _batches2.default.find({ instructorId }, {}, { sort: { batchId: asc } }).populate('instructorId', 'name');
   await query.exec((err, Batches) => {
     if (err) {
       res.json({ error: err.message });
+    } else {
+      res.json({ Batches });
     }
-    res.json({ Batches });
   });
 };
 
 const getBatchById = async (req, res) => {
-  const limit = Number(req.query.limit) || 5;
-  const asc = 1;
-  console.log(req.query);
   const { batchId } = req.query;
-  const query = _batches2.default.find({ batchId }, {}, { sort: { batchId: asc } }).limit(Number(limit)).populate('instructorId', 'name');
+  const query = _batches2.default.find({ batchId }, {}).populate('instructorId', 'name');
   await query.exec((err, Batches) => {
     if (err) {
       res.json({ error: err.message });
@@ -63,8 +63,9 @@ const getBatchesMain = async (req, res) => {
 
 const createBatch = async (req, res) => {
   const {
-    batchId, email, from, to, status
+    batchId, from, to, status
   } = req.body;
+  const { email } = req.decoded;
   const getInstructorId = await _user2.default.findOne({ email }, { _id: 1 });
   const instructorId = await _instructor4.default.findOne({ loginId: getInstructorId }, { _id: 1 });
   const newBatch = new _batches2.default({

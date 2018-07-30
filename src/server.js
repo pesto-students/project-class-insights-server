@@ -90,7 +90,7 @@ app.get(`${URLS.getFormById}/:id`, getFormController.getFormById);
 app.get(`${URLS.emailConfirmation}/:token`, signupController.confirmation);
 app.post(URLS.resendToken, signupController.resendToken);
 app.get(URLS.getLatestForm, getFormController.getLatestForm);
-app.get(`${URLS.batches}/:id`, batchesController.getBatches);
+app.get(URLS.batches, batchesController.getBatchesMain);
 
 app.get(URLS.feedbacks, feedbacksController.getBatchesFeedback);
 app.patch(`${URLS.batches}/:id`, batchesController.editBatch);
@@ -100,7 +100,5 @@ app.delete(URLS.batches, batchesController.deleteBatch);
 app.get(`${URLS.students}/:id`, studentController.getStudents);
 
 app.get('/test', analyseFeedbacks.setInitialResults);
-// create a poll function for setting results as zero in the feedback results model
-// initially if it;s not submitted
 
 export default app;

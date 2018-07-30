@@ -36,6 +36,7 @@ const addNewBatch = async (batchesId, InstructorId) => {
 };
 
 // delete from instructor
+
 exports.default = {
   createInstructor,
   addNewBatch

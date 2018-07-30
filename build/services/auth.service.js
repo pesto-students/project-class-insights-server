@@ -37,7 +37,7 @@ const ensureAuthenticated = (req, res, next) => {
   } else {
     // if there is no token, return an error
     res.status(403).send({
-      success: false,
+      error: false,
       message: 'No token provided.'
     });
   }

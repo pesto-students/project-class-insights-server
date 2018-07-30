@@ -20,20 +20,32 @@ var _triggerStudentInvite = require('../helpers/triggerStudentInvite');
 
 var _triggerStudentInvite2 = _interopRequireDefault(_triggerStudentInvite);
 
+var _user = require('../models/user.model');
+
+var _user2 = _interopRequireDefault(_user);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const createStudent = async (req, res) => {
   const {
     email, batchId
   } = req.body;
-  const realBatchId = await _batches2.default.findOne({ batchId }, { _id: 1 });
-  const newStudent = new _students2.default({
-    email,
-    batchId: realBatchId.id
-  });
   try {
-    const savedStudent = await newStudent.save();
-    await (0, _triggerStudentInvite2.default)(savedStudent);
+    const realBatchId = await _batches2.default.findOne({ batchId }, { _id: 1 });
+    const newStudent = new _students2.default({
+      email,
+      batchId: realBatchId.id
+    });
+    const userId = await _user2.default.findOne({ email }, { _id: 1 });
+    const student = await _students2.default.findOne({ studentObjectId: userId }, {});
+    if (student) {
+      /* eslint-disable */
+      await _students2.default.findOneAndUpdate({ studentObjectId: userId }, { $addToSet: { batchId: realBatchId } });
+      await (0, _triggerStudentInvite2.default)(newStudent);
+    } else {
+      const savedStudent = await newStudent.save();
+      await (0, _triggerStudentInvite2.default)(savedStudent);
+    }
 
     _batchUpdater2.default.updateStudentCount();
     console.log('Student added to the batch');
@@ -56,7 +68,19 @@ const passTheStudentId = async (namePassed, id, emailMatcher) => {
   }
 };
 
+const getStudents = async (req, res) => {
+  const batchId = req.params.id;
+  try {
+    const students = await _students2.default.find({ batchId });
+    res.json(students);
+  } catch (error) {
+    res.status(500);
+    console.log(error.message);
+  }
+};
+
 exports.default = {
   createStudent,
-  passTheStudentId
+  passTheStudentId,
+  getStudents
 };
