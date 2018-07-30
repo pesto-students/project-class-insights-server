@@ -103,7 +103,7 @@ const setInitialResults = async () => {
         subject: ele.subject,
         topic: ele.topic,
         batchId: ele.batchId,
-        averageRatings: {},
+        averageRatings: { 'Not Rated': 0 },
         feedbackCounts: 0,
         creationDate: ele.creationDate,
         comments: [],
