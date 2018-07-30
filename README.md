@@ -6,13 +6,13 @@
 
 Check out the running instance of app here:
 
-https://class-insights.herokuapp.com/
+http://classinsights-app.herokuapp.com
 
-**Test URLS**
+Client Side Github Repo
 
-https://classinsight-server.herokuapp.com/login
+https://github.com/pesto-students/project-class-insights-client
 
-https://classinsight-server.herokuapp.com/signup
+
 
 
 Description
