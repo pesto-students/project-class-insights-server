@@ -45,7 +45,11 @@ const feedbackSubmissionSchema = _mongoose2.default.Schema({
     ref: 'userBatchModel'
   },
   subtopics: [subtopic],
-  comments: String
+  comments: String,
+  revisit: {
+    type: Boolean,
+    default: false
+  }
 });
 
 const FeedbackSubmissionModel = _mongoose2.default.model('feedbackSubmissionModel', feedbackSubmissionSchema);

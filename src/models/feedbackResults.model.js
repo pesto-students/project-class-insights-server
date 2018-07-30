@@ -19,6 +19,10 @@ const feedbackFormResultsSchema = mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: 'feedbackFormModel',
   },
+  revisitCount: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const FeedbackFormResultsModel = mongoose.model('feedbackFormResultsModel', feedbackFormResultsSchema);

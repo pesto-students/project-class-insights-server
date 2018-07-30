@@ -28,6 +28,10 @@ const feedbackFormResultsSchema = _mongoose2.default.Schema({
   feedbackForm_ID: {
     type: Schema.Types.ObjectId,
     ref: 'feedbackFormModel'
+  },
+  revisitCount: {
+    type: Number,
+    default: 0
   }
 });
 

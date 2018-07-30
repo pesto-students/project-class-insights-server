@@ -30,6 +30,7 @@ const submitfeedback = async (req, res) => {
     topic: req.body.topic,
     email,
     batchId,
+    revisit: req.body.revisit,
     subtopics: req.body.subtopics.reduce((acc, curr) => {
       return [...acc, {
         subtopicName: curr.subtopicName,

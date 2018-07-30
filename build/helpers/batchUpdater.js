@@ -38,6 +38,22 @@ const updateStudentCount = async () => {
   }
 };
 
+const updateSpecificStudentCount = async batchId => {
+  try {
+    const results = _students2.default.find({ batchId }, {});
+    let studentCount;
+    if (results.length === null || results.length === undefined) {
+      studentCount = 0;
+    } else {
+      studentCount = results.length;
+    }
+    await _batches2.default.findOneAndUpdate({ _id: batchId }, { studentCount });
+  } catch (error) {
+    console.log('error at the specific count update');
+  }
+};
+
 exports.default = {
-  updateStudentCount
+  updateStudentCount,
+  updateSpecificStudentCount
 };

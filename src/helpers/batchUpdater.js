@@ -25,6 +25,22 @@ const updateStudentCount = async () => {
   }
 };
 
+const updateSpecificStudentCount = async (batchId) => {
+  try {
+    const results = StudentModel.find({ batchId }, {});
+    let studentCount;
+    if (results.length === null || results.length === undefined) {
+      studentCount = 0;
+    } else {
+      studentCount = results.length;
+    }
+    await UserBatchModel.findOneAndUpdate({ _id: batchId }, { studentCount });
+  } catch (error) {
+    console.log('error at the specific count update');
+  }
+};
+
 export default {
   updateStudentCount,
+  updateSpecificStudentCount,
 };

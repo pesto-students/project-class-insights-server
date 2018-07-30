@@ -146,7 +146,6 @@ app.get(`${_urls2.default.getFormById}/:id`, _getFromController2.default.getForm
 app.get(`${_urls2.default.emailConfirmation}/:token`, _signupController2.default.confirmation);
 app.post(_urls2.default.resendToken, _signupController2.default.resendToken);
 app.get(_urls2.default.getLatestForm, _getFromController2.default.getLatestForm);
-app.get(_urls2.default.batches, _batches2.default.getBatchesMain);
 
 app.get(_urls2.default.feedbacks, _feedbacks2.default.getBatchesFeedback);
 app.patch(`${_urls2.default.batches}/:id`, _batches2.default.editBatch);

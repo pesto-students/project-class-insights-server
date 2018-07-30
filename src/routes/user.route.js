@@ -23,5 +23,6 @@ userRoutes.get(URLS.batches, batchesController.getBatchesMain);
 userRoutes.post(URLS.batches, batchesController.createBatch);
 userRoutes.post(URLS.students, studentController.createStudent);
 userRoutes.get('/test', dashboardController.getResults);
+userRoutes.delete(URLS.students, studentController.deleteStudents);
 
 export default userRoutes;

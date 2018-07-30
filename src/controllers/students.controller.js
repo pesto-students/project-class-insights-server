@@ -3,6 +3,7 @@ import batchUpdater from '../helpers/batchUpdater';
 import UserBatchModel from '../models/batches.model';
 import triggerStudentInvite from '../helpers/triggerStudentInvite';
 import UserModel from '../models/user.model';
+import InstructorModel from '../models/instructor.model';
 
 const createStudent = async (req, res) => {
   const {
@@ -17,8 +18,9 @@ const createStudent = async (req, res) => {
     const userId = await UserModel.findOne({ email }, { _id: 1 });
     const student = await StudentModel.findOne({ studentObjectId: userId }, {});
     if (student) {
-      /* eslint-disable */
-      await StudentModel.findOneAndUpdate({ studentObjectId: userId }, { $addToSet: { batchId: realBatchId } });
+      await StudentModel.findOneAndUpdate({ studentObjectId: userId }, {
+        $addToSet: { batchId: realBatchId },
+      });
       await triggerStudentInvite(newStudent);
     } else {
       const savedStudent = await newStudent.save();
@@ -57,8 +59,52 @@ const getStudents = async (req, res) => {
   }
 };
 
+const deleteStudents = async (req, res) => {
+  const { email } = req.decoded;
+  const studentEmail = req.body.email;
+  const { batchId } = req.body;
+  const batches = batchId;
+  try {
+    const instructorId = await InstructorModel.findOne({ batches }, { loginId: 1 });
+    console.log(instructorId, batchId);
+    const emailBelongingForTheBatch = await UserModel.findOne(
+      { _id: instructorId.loginId },
+      { email: 1 },
+    );
+    if (email === emailBelongingForTheBatch.email) {
+      const studentObjectId = await UserModel.findOne({ email: studentEmail }, { _id: 1 });
+
+      if (studentObjectId === null) {
+        // not registered in the user collection
+
+        await StudentModel.findOneAndRemove({ email: studentEmail }, {});
+      } else {
+        // registered in the user collection
+
+        const result = await StudentModel.findOneAndUpdate({ studentObjectId }, {
+          $pull: {
+            batchId: req.body.batchId,
+          },
+        }, { new: true });
+        console.log(result.batchId);
+        // if(result.batchId.length)
+        // if the user is not in any more batches then delete the user from
+        // the student table, user table as well
+      }
+    }
+
+    // update specific batch student count
+    batchUpdater.updateSpecificStudentCount(batchId);
+    res.json({ message: 'done deleting your student but keep them in your heart' });
+  } catch (error) {
+    console.log('error in removing student');
+    res.json({ error: 'You just can\'t remove some people' });
+  }
+};
+
 export default {
   createStudent,
   passTheStudentId,
   getStudents,
+  deleteStudents,
 };
