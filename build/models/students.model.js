@@ -14,7 +14,7 @@ const { Schema } = _mongoose2.default;
 
 const StudentSchema = _mongoose2.default.Schema({
   batchId: {
-    type: Schema.Types.ObjectId,
+    type: [Schema.Types.ObjectId],
     ref: 'userBatchModel'
   },
   name: {

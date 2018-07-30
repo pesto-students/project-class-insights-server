@@ -14,8 +14,11 @@ const getResults = async (req, res) => {
     const results = await batchesArray.reduce(async (promise, ele) => {
       const acc = await promise;
       const result = await feedbackFormResultsModel.find({ batchId: ele }, {});
-      console.log(result);
-      acc.push(...result);
+      if(result.length !== 0){
+        acc.push(...result);
+        console.log(result);
+
+      }
       return acc;
     }, Promise.resolve([]));
     res.json(results);

@@ -13,7 +13,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 _dotenv2.default.config();
 
 exports.default = {
-  PORT: process.env.PORT || 3000,
+  PORT: process.env.PORT || 3001,
   NODE_ENV: process.env.NODE_ENV || 'development',
   DB_DIALECT: process.env.DB_DIALECT || 'mongo',
   DB_HOST: process.env.DB_HOST || 'localhost',

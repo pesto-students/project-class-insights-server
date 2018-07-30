@@ -10,6 +10,8 @@ var _feedbackSubmission2 = _interopRequireDefault(_feedbackSubmission);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// For Instructor
+
 const getBatchesFeedback = async (req, res) => {
   const limit = Number(req.query.limit) || 5;
   const desc = -1;
@@ -35,6 +37,8 @@ const getDayBatchFeedback = async (req, res) => {
     res.json(submittedFeedbackForm);
   });
 };
+
+// For Students
 
 exports.default = {
   getBatchesFeedback,

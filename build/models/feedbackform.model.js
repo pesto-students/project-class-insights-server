@@ -10,13 +10,11 @@ var _mongoose2 = _interopRequireDefault(_mongoose);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+const { Schema } = _mongoose2.default;
+
 const subtopic = _mongoose2.default.Schema({
   subtopicName: String,
   rating: [Number]
-});
-
-const comment = _mongoose2.default.Schema({
-  commentMessage: String
 });
 
 const feedbackFormSchema = _mongoose2.default.Schema({
@@ -30,16 +28,18 @@ const feedbackFormSchema = _mongoose2.default.Schema({
     required: true
   },
   subtopics: [subtopic],
-  comments: [comment],
   creationDate: {
-    type: String
+    type: Date
   },
   batchId: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'userBatchModel',
     required: true
   },
-  email: {
-    type: String
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 });
 

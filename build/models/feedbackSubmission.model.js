@@ -15,10 +15,13 @@ const subtopic = _mongoose2.default.Schema({
   rating: Number
 });
 
+const { Schema } = _mongoose2.default;
+
 const feedbackSubmissionSchema = _mongoose2.default.Schema({
   date: { type: Date, default: Date.now },
   feedbackForm_ID: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'feedbackFormModel',
     required: true
   },
   subject: {
@@ -30,14 +33,17 @@ const feedbackSubmissionSchema = _mongoose2.default.Schema({
     required: true
   },
   creationDate: {
-    type: String,
+    type: Date,
     required: true
   },
   email: {
     type: String,
     required: true
   },
-  batchId: String,
+  batchId: {
+    type: Schema.Types.ObjectId,
+    ref: 'userBatchModel'
+  },
   subtopics: [subtopic],
   comments: String
 });

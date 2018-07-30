@@ -8,9 +8,7 @@ import InstructorModel from '../models/instructor.model';
 
 const getBatches = async (req, res) => {
   const asc = 1;
-  console.log(req.query);
   const { email } = req.decoded;
-  console.log(email);
   const getInstructorId = await UserSchema.findOne({ email }, { _id: 1 });
   const instructorId = await InstructorModel.findOne({ loginId: getInstructorId }, { _id: 1 });
   console.log(instructorId);
@@ -29,7 +27,6 @@ const getBatches = async (req, res) => {
 };
 
 const getBatchById = async (req, res) => {
-  console.log(req.query);
   const { batchId } = req.query;
   const query = UserBatchModel.find({ batchId }, {})
     .populate('instructorId', 'name');

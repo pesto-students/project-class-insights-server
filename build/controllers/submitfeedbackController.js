@@ -4,20 +4,32 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _mongoose = require('mongoose');
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
 var _feedbackSubmission = require('../models/feedbackSubmission.model');
 
 var _feedbackSubmission2 = _interopRequireDefault(_feedbackSubmission);
 
+var _analyseFeedbacks = require('../helpers/analyseFeedbacks');
+
+var _analyseFeedbacks2 = _interopRequireDefault(_analyseFeedbacks);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/* eslint no-underscore-dangle: 0 */
 const submitfeedback = async (req, res) => {
+  const { batchId } = req.body;
+  const { email } = req.decoded;
+  const refFeedbackObjectId = _mongoose2.default.Types.ObjectId(req.body._id);
   const newFeedback = new _feedbackSubmission2.default({
-    feedbackForm_ID: req.body._id,
+    feedbackForm_ID: refFeedbackObjectId,
     subject: req.body.subject,
     creationDate: req.body.creationDate,
     topic: req.body.topic,
-    email: req.body.email,
-    batchId: req.body.batchId,
+    email,
+    batchId,
     subtopics: req.body.subtopics.reduce((acc, curr) => {
       return [...acc, {
         subtopicName: curr.subtopicName,
@@ -28,6 +40,7 @@ const submitfeedback = async (req, res) => {
   });
   try {
     await newFeedback.save();
+    _analyseFeedbacks2.default.analyseFeedbacks();
     console.log('feedback submitted');
     res.json({ success: 'feedback submitted successfully' });
   } catch (error) {
@@ -45,5 +58,6 @@ const submitfeedback = async (req, res) => {
     }
     console.log(error.message);
   }
-}; /* eslint no-underscore-dangle: 0 */
+};
+
 exports.default = { submitfeedback };
