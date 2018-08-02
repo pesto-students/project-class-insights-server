@@ -72,28 +72,40 @@ const createBatch = async (req, res) => {
 };
 
 const editBatch = async (req, res) => {
-  const oldBatchId = req.params.id;
+  const { oldBatchId, status,students, startDate, endDate, batchID } = req.body;
   // check with the ensure authenticated call to add the email later in the req.body
   // to get the verified person editing the right batch
-  const { email } = req.body;
+  const { email } = req.decoded;
+  const form = {
+    studentCount: students,
+    batchId: batchID,
+    from: startDate,
+    to: endDate,
+    status: Boolean(status),
+  };
   const getInstructorId = await UserSchema.findOne({ email }, { _id: 1 });
   const instructorId = await InstructorModel.findOne({ loginId: getInstructorId }, { _id: 1 });
-  UserBatchModel.findOneAndUpdate({ batchId: oldBatchId, instructorId }, req.body, (err) => {
-    if (err) res.json({ error: 'error' });
-    res.json({ success: 'Updated the batch ' });
+  UserBatchModel.findOneAndUpdate({ batchId: oldBatchId, instructorId }, form, (err) => {
+    if (err) {
+      res.json({ error: 'error at finding the batch' });
+    } else {
+      res.json({ success: 'Batch Updated' });
+    }
   });
 };
 
 const deleteBatch = async (req, res) => {
   // authenticate with the help of ensureauthenticate and get the email from token.
   const { batchId, email } = req.body;
-  const getInstructorId = await UserSchema.findOne({ email }, { _id: 1 });
-  const instructorId = await InstructorModel.findOne({ loginId: getInstructorId }, { _id: 1 });
-  console.log(instructorId, getInstructorId);
-  UserBatchModel.findOneAndRemove({ instructorId, batchId }, (err) => {
-    if (err) res.json({ error: 'Error deleting Batch' });
+  try {
+    const getInstructorId = await UserSchema.findOne({ email }, { _id: 1 });
+    const instructorId = await InstructorModel.findOne({ loginId: getInstructorId }, { _id: 1 });
+    
+    await UserBatchModel.findOneAndRemove({ instructorId, batchId });
     res.json({ success: 'Deleted Succesfully' });
-  });
+  } catch(error) {
+    res.json({ error: 'Error deleting Batch' });
+  }
 };
 
 

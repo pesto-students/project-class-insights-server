@@ -92,7 +92,6 @@ app.post(URLS.resendToken, signupController.resendToken);
 app.get(URLS.getLatestForm, getFormController.getLatestForm);
 
 app.get(URLS.feedbacks, feedbacksController.getBatchesFeedback);
-app.patch(`${URLS.batches}/:id`, batchesController.editBatch);
 app.delete(URLS.batches, batchesController.deleteBatch);
 
 
