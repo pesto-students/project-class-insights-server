@@ -35,6 +35,7 @@ describe('POST / sends response', () => {
   });
 
   test('should respond with email already registered already existing user', async () => {
+    await request(app).post(URLS.signup).send(existingUser);
     const response = await request(app).post(URLS.signup).send(existingUser);
     expect(response.body.error).toBe('email already registered');
     expect(response.statusCode).toBe(422);
