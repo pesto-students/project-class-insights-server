@@ -32,6 +32,10 @@ const feedbackFormSchema = mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const FeedbackFormModel = mongoose.model('feedbackFormModel', feedbackFormSchema);

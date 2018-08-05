@@ -8,6 +8,7 @@ import submitfeedbackController from '../controllers/submitfeedbackController';
 import batchesController from '../controllers/batches.controller';
 import studentController from '../controllers/students.controller';
 import dashboardController from '../controllers/dashboard.controller';
+import feedbacksController from '../controllers/feedbacks.controller';
 
 const userRoutes = express.Router();
 
@@ -24,5 +25,6 @@ userRoutes.post(URLS.batches, batchesController.createBatch);
 userRoutes.post(URLS.students, studentController.createStudent);
 userRoutes.get('/test', dashboardController.getResults);
 userRoutes.patch(URLS.batches, batchesController.editBatch);
+userRoutes.patch(URLS.feedbacks, feedbacksController.setStatusOfFeedback);
 
 export default userRoutes;

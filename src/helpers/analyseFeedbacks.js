@@ -26,6 +26,7 @@ const makeObject = async (singleForm) => {
     if (feedbacks.length === 0) {
       return responseObject;
     }
+    responseObject.isActive = feedbacks[0].isActive;
     responseObject.subject = feedbacks[0].subject;
     responseObject.topic = feedbacks[0].topic;
     responseObject.batchId = feedbacks[0].batchId;
