@@ -40,6 +40,10 @@ const feedbackSubmissionSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const FeedbackSubmissionModel = mongoose.model('feedbackSubmissionModel', feedbackSubmissionSchema);

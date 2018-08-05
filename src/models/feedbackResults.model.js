@@ -23,6 +23,10 @@ const feedbackFormResultsSchema = mongoose.Schema({
     type: Number,
     default: 0,
   },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const FeedbackFormResultsModel = mongoose.model('feedbackFormResultsModel', feedbackFormResultsSchema);

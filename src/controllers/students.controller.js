@@ -22,16 +22,21 @@ const createStudent = async (req, res) => {
         $addToSet: { batchId: realBatchId },
       });
       await triggerStudentInvite(newStudent);
+      res.json({ success: 'Student created and added to the batchId' });
     } else {
-      const savedStudent = await newStudent.save();
-      await triggerStudentInvite(savedStudent);
+      const alreadyPresentStudent = await StudentModel.findOne({ email }, {});
+      if (alreadyPresentStudent) {
+        res.json({ error: 'Already added in this batch' });
+      } else {
+        const savedStudent = await newStudent.save();
+        await triggerStudentInvite(savedStudent);
+        res.json({ success: 'Student created and added to the batchId' });
+      }
     }
 
     batchUpdater.updateStudentCount();
     console.log('Student added to the batch');
-    res.json({ success: 'Student created and added to the batchId' });
   } catch (error) {
-    console.log(error);
     res.json({ error: 'Error creating students' });
   }
 };
@@ -55,7 +60,6 @@ const getStudents = async (req, res) => {
     res.json(students);
   } catch (error) {
     res.status(500);
-    console.log(error.message);
   }
 };
 
@@ -66,7 +70,6 @@ const deleteStudents = async (req, res) => {
   const batches = batchId;
   try {
     const instructorId = await InstructorModel.findOne({ batches }, { loginId: 1 });
-    console.log(instructorId, batchId);
     const emailBelongingForTheBatch = await UserModel.findOne(
       { _id: instructorId.loginId },
       { email: 1 },
@@ -80,25 +83,26 @@ const deleteStudents = async (req, res) => {
         await StudentModel.findOneAndRemove({ email: studentEmail }, {});
       } else {
         // registered in the user collection
-
         const result = await StudentModel.findOneAndUpdate({ studentObjectId }, {
           $pull: {
             batchId: req.body.batchId,
           },
         }, { new: true });
-        console.log(result.batchId);
-        // if(result.batchId.length)
         // if the user is not in any more batches then delete the user from
         // the student table, user table as well
+        if (result.batchId.length === 0) {
+          await StudentModel.findOneAndRemove({ email: studentEmail }, {});
+          await UserModel.findOneAndRemove({ email: studentEmail }, {});
+        }
       }
     }
 
     // update specific batch student count
     batchUpdater.updateSpecificStudentCount(batchId);
-    res.json({ message: 'done deleting your student but keep them in your heart' });
+    res.json({ message: 'Student deleted' });
   } catch (error) {
     console.log('error in removing student');
-    res.json({ error: 'You just can\'t remove some people' });
+    res.json({ error: 'Unable to delete student' });
   }
 };
 
