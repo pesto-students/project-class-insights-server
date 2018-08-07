@@ -48,30 +48,18 @@ const getForm = async (req, res) => {
   } else {
     const studentObjectId = _id;
     // array error so iterate
-    console.log('asd', studentObjectId);
-    const studentData = await _students2.default.find({ studentObjectId: _id }, { batchId: 1 });
+    const studentData = await _students2.default.find({ studentObjectId }, { batchId: 1 });
     const { batchId } = studentData[0];
-    console.log(batchId);
-    const form = await studentData.reduce(async (promise, ele) => {
+    const form = await batchId.reduce(async (promise, ele) => {
       const acc = await promise;
       try {
-        const results = await _feedbackform2.default.find({ batchId: ele.batchId }, {}, { sort: { date: sort } }).populate('batchId');
+        const results = await _feedbackform2.default.find({ batchId: ele }, {}, { sort: { date: sort } }).populate('batchId');
         return [...acc, ...results];
       } catch (error) {
-        console.log(error.message);
         return acc;
       }
     }, Promise.resolve([]));
-    console.log(form);
     res.json(form);
-    // const query = FeedbackformModel.find({ batchId }, {}, { sort: { date: sort } });
-    // await query.exec((err, form) => {
-    //   if (err) {
-    //     res.json({ error: err.message });
-    //   }
-    //   res.json(form);
-    // });
-    // // set is submitted to true if it's in the student model submitted forms
   }
 };
 

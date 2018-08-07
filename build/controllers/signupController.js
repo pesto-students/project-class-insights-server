@@ -98,7 +98,6 @@ const signup = async (req, res) => {
       res.status(422);
       res.json({ error: 'Password should be minimum 8 characters long' });
     }
-    console.log(error.message);
   }
 };
 

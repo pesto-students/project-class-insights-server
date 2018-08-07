@@ -20,7 +20,6 @@ const createInstructor = async (namePassed, _id) => {
   try {
     await newInstructor.save();
   } catch (error) {
-    console.log(error);
     console.log('error in creating instructor');
   }
 };
