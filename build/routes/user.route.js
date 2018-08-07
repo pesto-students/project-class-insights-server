@@ -44,6 +44,10 @@ var _dashboard = require('../controllers/dashboard.controller');
 
 var _dashboard2 = _interopRequireDefault(_dashboard);
 
+var _feedbacks = require('../controllers/feedbacks.controller');
+
+var _feedbacks2 = _interopRequireDefault(_feedbacks);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const userRoutes = _express2.default.Router();
@@ -61,5 +65,6 @@ userRoutes.post(_urls2.default.batches, _batches2.default.createBatch);
 userRoutes.post(_urls2.default.students, _students2.default.createStudent);
 userRoutes.get('/test', _dashboard2.default.getResults);
 userRoutes.patch(_urls2.default.batches, _batches2.default.editBatch);
+userRoutes.patch(_urls2.default.feedbacks, _feedbacks2.default.setStatusOfFeedback);
 
 exports.default = userRoutes;

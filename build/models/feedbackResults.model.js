@@ -32,6 +32,10 @@ const feedbackFormResultsSchema = _mongoose2.default.Schema({
   revisitCount: {
     type: Number,
     default: 0
+  },
+  isActive: {
+    type: Boolean,
+    default: true
   }
 });
 

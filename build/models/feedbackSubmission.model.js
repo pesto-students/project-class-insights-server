@@ -49,6 +49,10 @@ const feedbackSubmissionSchema = _mongoose2.default.Schema({
   revisit: {
     type: Boolean,
     default: false
+  },
+  isActive: {
+    type: Boolean,
+    default: true
   }
 });
 

@@ -11,3 +11,6 @@ deploy:
     master: classinsights
 services:
 - mongodb
+before_script:
+- sleep 15
+- mongorestore -d classinsights ./testDatabase

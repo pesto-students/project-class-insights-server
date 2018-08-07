@@ -40,6 +40,10 @@ const feedbackFormSchema = _mongoose2.default.Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
+  },
+  isActive: {
+    type: Boolean,
+    default: true
   }
 });
 

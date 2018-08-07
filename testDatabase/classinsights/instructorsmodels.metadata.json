@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"classinsights.instructorsmodels"},{"v":2,"unique":true,"key":{"loginId":1},"name":"loginId_1","ns":"classinsights.instructorsmodels","background":true}],"uuid":"1bb8281f1fb647a3b4fd5d759bf1268a"}

@@ -4,7 +4,7 @@ import app from '../src/server';
 import URLS from '../src/lib/urls';
 
 const dummyUser = {
-  email: 'gefava@shinnemo.com',
+  email: 'monis.ahmad42@gmail.com',
   password: 'password',
 };
 
