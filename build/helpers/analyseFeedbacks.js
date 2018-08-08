@@ -24,24 +24,25 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /* eslint no-underscore-dangle: 0 */
 const getSubtopicAvg = subtopics => {
-  const totalRating = index => subtopics.reduce((acc, val) => {
-    return acc + val.map(v2 => v2.rating)[index];
+  const totalRatingOfaSubTopic = index => subtopics.reduce((acc, val) => {
+    const subtopicRatingAtIndex = val.map(v2 => v2.rating)[index];
+    return acc + subtopicRatingAtIndex;
   }, 0);
   const subtopicAvg = subtopics[0].reduce((acc, curr, index) => {
-    acc[curr.subtopicName] = Math.round(totalRating(index) / subtopics.length * 100) / 100;
+    const singleSubtopicRating = totalRatingOfaSubTopic(index) / subtopics.length * 100;
+    acc[curr.subtopicName] = Math.round(singleSubtopicRating) / 100;
     return acc;
   }, {});
   return subtopicAvg;
 };
 
+// calculates the results for each form submitted and consolidates them
 const makeObject = async singleForm => {
   const responseObject = {};
   const id = _mongoose2.default.Types.ObjectId(singleForm._id);
-  // const id = singleForm._id;
-  const query2 = _feedbackSubmission2.default.find({ feedbackForm_ID: id }, {});
+  const findSubmittedFeedback = _feedbackSubmission2.default.find({ feedbackForm_ID: id }, {});
   try {
-    const feedbacks = await query2.exec();
-    console.log(JSON.stringify(feedbacks));
+    const feedbacks = await findSubmittedFeedback.exec();
     if (feedbacks.length === 0) {
       return responseObject;
     }
@@ -60,7 +61,6 @@ const makeObject = async singleForm => {
       }
       return acc;
     }, 0);
-    return responseObject;
   } catch (error) {
     console.log('error at poll in makeObject');
   }
@@ -71,6 +71,8 @@ const analyseFeedbacks = async () => {
   const date = new Date();
   let allFeedbackForms = [];
   date.setDate(date.getDate() - 1);
+
+  // get all the forms created by all the instructors as a list of their ids
   const query = _feedbackform2.default.find({}).select('_id');
   try {
     allFeedbackForms = await query.exec();
@@ -78,6 +80,7 @@ const analyseFeedbacks = async () => {
     console.log('error at poll feedback form modal');
   }
 
+  // create a list of all the results you want to save
   const result = await allFeedbackForms.reduce(async (promise, curr) => {
     const acc = await promise;
     try {
@@ -89,12 +92,14 @@ const analyseFeedbacks = async () => {
       return acc;
     }
   }, Promise.resolve([]));
+
+  // insert all the results one by one in the results model
   result.forEach(async element => {
-    const newResult = new _feedbackResults2.default(element);
     const analysedResult = await _feedbackResults2.default.findOne({ feedbackForm_ID: element.feedbackForm_ID }, {});
     if (analysedResult) {
       await _feedbackResults2.default.findOneAndUpdate({ feedbackForm_ID: element.feedbackForm_ID }, element);
     } else {
+      const newResult = new _feedbackResults2.default(element);
       await newResult.save();
     }
   });
@@ -105,26 +110,26 @@ const setInitialResults = async () => {
   forms.forEach(async ele => {
     const data = await _feedbackResults2.default.findOne({ feedbackForm_ID: ele._id }, {});
     if (!data) {
-      console.log('heya');
+      const {
+        subject, topic, batchId, creationDate, _id
+      } = ele;
       const intialResult = new _feedbackResults2.default({
-        subject: ele.subject,
-        topic: ele.topic,
-        batchId: ele.batchId,
+        subject,
+        topic,
+        batchId,
         averageRatings: { 'Not Rated': 0 },
         feedbackCounts: 0,
-        creationDate: ele.creationDate,
+        creationDate,
         comments: [],
-        feedbackForm_ID: ele._id
+        feedbackForm_ID: _id
       });
       try {
         await intialResult.save();
       } catch (error) {
-        console.log(error.message);
         console.log('error at the poll in setting intial results');
       }
     }
   });
-  // console.log(forms);
 };
 
 exports.default = {

@@ -77,7 +77,7 @@ const createBatch = async (req, res) => {
   });
   try {
     await newBatch.save();
-    /* eslint-disable */ // newBatch._id dangling _ problem
+    /* eslint-disable no-underscore-dangle */
     _instructor2.default.addNewBatch(newBatch._id, newBatch.instructorId._id);
     console.log('Batch Created');
     res.json({ success: 'Batch created' });
@@ -87,7 +87,9 @@ const createBatch = async (req, res) => {
 };
 
 const editBatch = async (req, res) => {
-  const { oldBatchId, status, students, startDate, endDate, batchID } = req.body;
+  const {
+    oldBatchId, status, students, startDate, endDate, batchID
+  } = req.body;
   // check with the ensure authenticated call to add the email later in the req.body
   // to get the verified person editing the right batch
   const { email } = req.decoded;
@@ -111,7 +113,8 @@ const editBatch = async (req, res) => {
 
 const deleteBatch = async (req, res) => {
   // authenticate with the help of ensureauthenticate and get the email from token.
-  const { batchId, email } = req.body;
+  const { batchId } = req.body;
+  const { email } = req.decoded;
   try {
     const getInstructorId = await _user2.default.findOne({ email }, { _id: 1 });
     const instructorId = await _instructor4.default.findOne({ loginId: getInstructorId }, { _id: 1 });

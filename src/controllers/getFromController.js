@@ -2,11 +2,6 @@ import FeedbackformModel from '../models/feedbackform.model';
 import UserSchema from '../models/user.model';
 import StudentModel from '../models/students.model';
 
-const getLatestForm = async (req, res) => {
-  await FeedbackformModel.findOne({}, {}, { sort: { date: -1 } }, (err, form) => {
-    res.json(form);
-  });
-};
 
 const getFormById = async (req, res) => {
   await FeedbackformModel.findById(req.params.id, (err, form) => {
@@ -14,13 +9,18 @@ const getFormById = async (req, res) => {
   });
 };
 
+const getUserDetails = async (email) => {
+  const userData = await UserSchema.findOne({ email }, { isInstructor: 1, _id: 1 });
+  return userData;
+};
+
 const getForm = async (req, res) => {
   const sort = Number(req.query.sort) || -1;
 
   const { email } = req.decoded;
 
-  const userData = await UserSchema.findOne({ email }, { isInstructor: 1, _id: 1 });
-  const { isInstructor, _id } = userData;
+  // const userData = await UserSchema.findOne({ email }, { isInstructor: 1, _id: 1 });
+  const { isInstructor, _id } = await getUserDetails(email);
   if (isInstructor) {
     const query = FeedbackformModel.find({ userId: _id }, {}, { sort: { date: sort } }).populate('batchId');
     await query.exec((err, form) => {
@@ -31,8 +31,8 @@ const getForm = async (req, res) => {
     });
   } else {
     const studentObjectId = _id;
-    // array error so iterate
     const studentData = await StudentModel.find({ studentObjectId }, { batchId: 1 });
+    console.log(studentData);
     const { batchId } = studentData[0];
     const form = await batchId.reduce(async (promise, ele) => {
       const acc = await promise;
@@ -50,7 +50,6 @@ const getForm = async (req, res) => {
 };
 
 export default {
-  getLatestForm,
   getFormById,
   getForm,
 };

@@ -18,12 +18,12 @@ const getResults = async (req, res) => {
       const result = await feedbackFormResultsModel.find({ batchId: ele, isActive }, {});
       if(result.length !== 0){
         acc.push(...result);
-        console.log(result);
-
       }
       return acc;
     }, Promise.resolve([]));
     res.json(results);
+  } else {
+    res.json({error: 'Not able to get results'});
   }
 };
 

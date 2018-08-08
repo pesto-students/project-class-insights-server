@@ -18,4 +18,5 @@ export default {
   batches: '/batches',
   feedbacks: '/feedbacks',
   students: '/students',
+  dashboard: '/dashboard',
 };
