@@ -18,16 +18,15 @@ var _students2 = _interopRequireDefault(_students);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const getLatestForm = async (req, res) => {
-  await _feedbackform2.default.findOne({}, {}, { sort: { date: -1 } }, (err, form) => {
-    res.json(form);
-  });
-};
-
 const getFormById = async (req, res) => {
   await _feedbackform2.default.findById(req.params.id, (err, form) => {
     res.json(form);
   });
+};
+
+const getUserDetails = async email => {
+  const userData = await _user2.default.findOne({ email }, { isInstructor: 1, _id: 1 });
+  return userData;
 };
 
 const getForm = async (req, res) => {
@@ -35,8 +34,8 @@ const getForm = async (req, res) => {
 
   const { email } = req.decoded;
 
-  const userData = await _user2.default.findOne({ email }, { isInstructor: 1, _id: 1 });
-  const { isInstructor, _id } = userData;
+  // const userData = await UserSchema.findOne({ email }, { isInstructor: 1, _id: 1 });
+  const { isInstructor, _id } = await getUserDetails(email);
   if (isInstructor) {
     const query = _feedbackform2.default.find({ userId: _id }, {}, { sort: { date: sort } }).populate('batchId');
     await query.exec((err, form) => {
@@ -47,8 +46,8 @@ const getForm = async (req, res) => {
     });
   } else {
     const studentObjectId = _id;
-    // array error so iterate
     const studentData = await _students2.default.find({ studentObjectId }, { batchId: 1 });
+    console.log(studentData);
     const { batchId } = studentData[0];
     const form = await batchId.reduce(async (promise, ele) => {
       const acc = await promise;
@@ -64,7 +63,6 @@ const getForm = async (req, res) => {
 };
 
 exports.default = {
-  getLatestForm,
   getFormById,
   getForm
 };

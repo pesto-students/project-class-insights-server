@@ -1,6 +1,5 @@
 import express from 'express';
 import AuthService from '../services/auth.service';
-import UserController from '../controllers/user.controller';
 import URLS from '../lib/urls';
 import submitformController from '../controllers/submitformController';
 import getFormController from '../controllers/getFromController';
@@ -14,17 +13,20 @@ const userRoutes = express.Router();
 
 userRoutes.use(URLS.home, AuthService.ensureAuthenticated);
 
-userRoutes.post(URLS.home, UserController.getAllUsers);
-
-userRoutes.post(URLS.submitform, submitformController.submit);
-
 userRoutes.get(URLS.getForm, getFormController.getForm);
-userRoutes.post(URLS.submitfeedback, submitfeedbackController.submitfeedback);
 userRoutes.get(URLS.batches, batchesController.getBatchesMain);
+userRoutes.get(URLS.dashboard, dashboardController.getResults);
+userRoutes.get(`${URLS.getFormById}/:id`, getFormController.getFormById);
+userRoutes.get(`${URLS.students}/:id`, studentController.getStudents);
+
 userRoutes.post(URLS.batches, batchesController.createBatch);
+userRoutes.post(URLS.submitfeedback, submitfeedbackController.submitfeedback);
+userRoutes.post(URLS.submitform, submitformController.createForm);
 userRoutes.post(URLS.students, studentController.createStudent);
-userRoutes.get('/test', dashboardController.getResults);
+
 userRoutes.patch(URLS.batches, batchesController.editBatch);
 userRoutes.patch(URLS.feedbacks, feedbacksController.setStatusOfFeedback);
+
+userRoutes.delete(URLS.batches, batchesController.deleteBatch);
 
 export default userRoutes;

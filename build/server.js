@@ -36,13 +36,9 @@ var _userConstants = require('./lib/userConstants');
 
 var _userConstants2 = _interopRequireDefault(_userConstants);
 
-var _user = require('./models/user.model');
+var _user = require('./routes/user.route');
 
 var _user2 = _interopRequireDefault(_user);
-
-var _user3 = require('./routes/user.route');
-
-var _user4 = _interopRequireDefault(_user3);
 
 var _auth = require('./controllers/auth.controller');
 
@@ -52,38 +48,16 @@ var _signupController = require('./controllers/signupController');
 
 var _signupController2 = _interopRequireDefault(_signupController);
 
-var _getFromController = require('./controllers/getFromController');
-
-var _getFromController2 = _interopRequireDefault(_getFromController);
-
-var _batches = require('./controllers/batches.controller');
-
-var _batches2 = _interopRequireDefault(_batches);
-
-var _feedbacks = require('./controllers/feedbacks.controller');
-
-var _feedbacks2 = _interopRequireDefault(_feedbacks);
-
-var _students = require('./controllers/students.controller');
-
-var _students2 = _interopRequireDefault(_students);
-
 var _batchUpdater = require('./helpers/batchUpdater');
 
 var _batchUpdater2 = _interopRequireDefault(_batchUpdater);
 
-var _analyseFeedbacks = require('./helpers/analyseFeedbacks');
-
-var _analyseFeedbacks2 = _interopRequireDefault(_analyseFeedbacks);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Import required controllers
-
-// Import all models
+/* eslint-disable no-console */
 _dotenv2.default.config();
 
-// Import all routes
+// Import required controllers
 
 
 const { DB_URI } = _constants2.default;
@@ -95,64 +69,35 @@ _mongoose2.default.connect(DB_URI, { useNewUrlParser: true });
 
 _mongoose2.default.connection.on('open', () => {
   console.log('Connected to mongo server.');
-  // return start_up();
 });
 
 _mongoose2.default.connection.on('error', err => {
   console.log('Could not connect to mongo server!');
-  return console.log(err);
-});
-
-app.use('/users', _user4.default);
-
-app.get('/', (req, res) => res.send('Working!'));
-app.get('/status', (req, res) => {
-  res.json({ status: 'Server is up and running!' });
-});
-
-app.get('/setup', async (req, res) => {
-  // create a sample user
-  const John = new _user2.default({
-    name: 'John Boy',
-    email: 'johnboy@example.com',
-    password: 'password'
-  });
-
-  // save the sample user
-  try {
-    await John.save();
-    console.log('User saved successfully');
-    res.json({ success: true });
-  } catch (error) {
-    console.log(error);
-  }
+  return err;
 });
 
 const poll = (0, _asyncPolling2.default)(end => {
   _batchUpdater2.default.updateStudentCount();
   end();
 }, _userConstants2.default.WAIT_TIME);
+
 poll.on('error', () => {
   console.log('error in poll');
 });
 
 poll.run();
 
-app.post(_urls2.default.login, _auth2.default.login);
-app.post(_urls2.default.signup, _signupController2.default.signup);
+app.use('/users', _user2.default);
 
-app.get(`${_urls2.default.getFormById}/:id`, _getFromController2.default.getFormById);
+app.get('/', (_, res) => res.send('Working!'));
+app.get('/status', (_, res) => {
+  res.json({ status: 'Server is up and running!' });
+});
 
 app.get(`${_urls2.default.emailConfirmation}/:token`, _signupController2.default.confirmation);
+
 app.post(_urls2.default.resendToken, _signupController2.default.resendToken);
-app.get(_urls2.default.getLatestForm, _getFromController2.default.getLatestForm);
-// app.get(URLS.batches, batchesController.getBatchesMain);
-
-app.get(_urls2.default.feedbacks, _feedbacks2.default.getBatchesFeedback);
-app.delete(_urls2.default.batches, _batches2.default.deleteBatch);
-
-app.get(`${_urls2.default.students}/:id`, _students2.default.getStudents);
-
-app.get('/test', _analyseFeedbacks2.default.analyseFeedbacks);
+app.post(_urls2.default.login, _auth2.default.login);
+app.post(_urls2.default.signup, _signupController2.default.signup);
 
 exports.default = app;

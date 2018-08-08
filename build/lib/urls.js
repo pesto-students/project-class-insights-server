@@ -22,5 +22,6 @@ exports.default = {
   resendToken: '/resend',
   batches: '/batches',
   feedbacks: '/feedbacks',
-  students: '/students'
+  students: '/students',
+  dashboard: '/dashboard'
 };

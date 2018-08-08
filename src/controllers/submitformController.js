@@ -3,8 +3,10 @@ import UserSchema from '../models/user.model';
 import UserBatchModel from '../models/batches.model';
 import analyseFeedbacks from '../helpers/analyseFeedbacks';
 
-const submit = async (req, res) => {
-  const { batchId, date } = req.body;
+const createForm = async (req, res) => {
+  const {
+    batchId, date, subject, topic,
+  } = req.body;
   const { email } = req.decoded;
   let userId;
   let batchIdRef;
@@ -19,8 +21,8 @@ const submit = async (req, res) => {
   }
 
   const newForm = new FeedbackformModel({
-    subject: req.body.subject,
-    topic: req.body.topic,
+    subject,
+    topic,
     creationDate: new Date(date),
     batchId: batchIdRef,
     userId,
@@ -47,4 +49,4 @@ const submit = async (req, res) => {
   }
 };
 
-export default { submit };
+export default { createForm };

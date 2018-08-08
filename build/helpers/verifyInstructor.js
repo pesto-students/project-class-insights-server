@@ -17,13 +17,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 const verifyInstructor = async emailPassed => {
   const email = emailPassed;
   const user = await _user2.default.findOne({ email }, {});
-  /* eslint-disable */
+  // eslint-disable-next-line no-underscore-dangle
   const instructor = await _instructor2.default.findOne({ loginId: user._id }, {});
   if (instructor) {
     return instructor;
-  } else {
-    return false;
   }
+  return false;
 };
 
 exports.default = {

@@ -22,8 +22,10 @@ var _analyseFeedbacks2 = _interopRequireDefault(_analyseFeedbacks);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const submit = async (req, res) => {
-  const { batchId, date } = req.body;
+const createForm = async (req, res) => {
+  const {
+    batchId, date, subject, topic
+  } = req.body;
   const { email } = req.decoded;
   let userId;
   let batchIdRef;
@@ -38,8 +40,8 @@ const submit = async (req, res) => {
   }
 
   const newForm = new _feedbackform2.default({
-    subject: req.body.subject,
-    topic: req.body.topic,
+    subject,
+    topic,
     creationDate: new Date(date),
     batchId: batchIdRef,
     userId,
@@ -65,4 +67,4 @@ const submit = async (req, res) => {
   }
 };
 
-exports.default = { submit };
+exports.default = { createForm };

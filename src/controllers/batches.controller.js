@@ -62,7 +62,7 @@ const createBatch = async (req, res) => {
   });
   try {
     await newBatch.save();
-    /* eslint-disable */ // newBatch._id dangling _ problem
+    /* eslint-disable no-underscore-dangle */
     instructorController.addNewBatch(newBatch._id, newBatch.instructorId._id);
     console.log('Batch Created');
     res.json({ success: 'Batch created' });
@@ -72,7 +72,9 @@ const createBatch = async (req, res) => {
 };
 
 const editBatch = async (req, res) => {
-  const { oldBatchId, status,students, startDate, endDate, batchID } = req.body;
+  const {
+    oldBatchId, status, students, startDate, endDate, batchID,
+  } = req.body;
   // check with the ensure authenticated call to add the email later in the req.body
   // to get the verified person editing the right batch
   const { email } = req.decoded;
@@ -96,14 +98,15 @@ const editBatch = async (req, res) => {
 
 const deleteBatch = async (req, res) => {
   // authenticate with the help of ensureauthenticate and get the email from token.
-  const { batchId, email } = req.body;
+  const { batchId } = req.body;
+  const { email } = req.decoded;
   try {
     const getInstructorId = await UserSchema.findOne({ email }, { _id: 1 });
     const instructorId = await InstructorModel.findOne({ loginId: getInstructorId }, { _id: 1 });
-    
+
     await UserBatchModel.findOneAndRemove({ instructorId, batchId });
     res.json({ success: 'Deleted Succesfully' });
-  } catch(error) {
+  } catch (error) {
     res.json({ error: 'Error deleting Batch' });
   }
 };
