@@ -32,7 +32,6 @@ const getForm = async (req, res) => {
   } else {
     const studentObjectId = _id;
     const studentData = await StudentModel.find({ studentObjectId }, { batchId: 1 });
-    console.log(studentData);
     const { batchId } = studentData[0];
     const form = await batchId.reduce(async (promise, ele) => {
       const acc = await promise;
@@ -52,4 +51,5 @@ const getForm = async (req, res) => {
 export default {
   getFormById,
   getForm,
+  getUserDetails,
 };

@@ -52,7 +52,10 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "verbose": true
+    "verbose": true,
+    "collectCoverageFrom": [
+      "src/**/*"
+    ]
   },
   "engines": {
     "node": ">=9.11"
