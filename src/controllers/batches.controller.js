@@ -5,51 +5,37 @@ import UserSchema from '../models/user.model';
 import instructorController from './instructor.controller';
 import InstructorModel from '../models/instructor.model';
 
-
-const getBatches = async (req, res) => {
+const getBatches = async (email) => {
   const asc = 1;
-  const { email } = req.decoded;
   const getInstructorId = await UserSchema.findOne({ email }, { _id: 1 });
   const instructorId = await InstructorModel.findOne({ loginId: getInstructorId }, { _id: 1 });
-  const query = UserBatchModel.find(
-    { instructorId }, {},
-    { sort: { batchId: asc } },
-  )
-    .populate('instructorId', 'name');
-  await query.exec((err, Batches) => {
-    if (err) {
-      res.json({ error: err.message });
-    } else {
-      res.json({ Batches });
-    }
-  });
+  return UserBatchModel
+    .find({ instructorId }, {}, { sort: { batchId: asc } })
+    .populate('instructorId', 'name')
+    .exec();
 };
 
-const getBatchById = async (req, res) => {
-  const { batchId } = req.query;
-  const query = UserBatchModel.find({ batchId }, {})
-    .populate('instructorId', 'name');
-  await query.exec((err, Batches) => {
-    if (err) {
-      res.json({ error: err.message });
-    }
-    res.json({ Batches });
-  });
-};
+const getBatchById = batchId => UserBatchModel
+  .find({ batchId }, {})
+  .populate('instructorId', 'name')
+  .exec();
 
 const getBatchesMain = async (req, res) => {
-  if (req.query.batchId) {
-    getBatchById(req, res);
-  } else {
-    getBatches(req, res);
+  try {
+    const isBatchId = req.query.batchId !== undefined;
+    const Batches = isBatchId
+      ? await getBatchById(req.query.batchId)
+      : await getBatches(req.decoded.email);
+    res.json({ Batches });
+  } catch (error) {
+    res.json({ error: error.message });
   }
 };
 
-const createBatch = async (req, res) => {
+const createBatchHere = async (body, email) => {
   const {
     batchId, from, to, status,
-  } = req.body;
-  const { email } = req.decoded;
+  } = body;
   const getInstructorId = await UserSchema.findOne({ email }, { _id: 1 });
   const instructorId = await InstructorModel.findOne({ loginId: getInstructorId }, { _id: 1 });
   const newBatch = new UserBatchModel({
@@ -60,10 +46,14 @@ const createBatch = async (req, res) => {
     to,
     status,
   });
+  await newBatch.save();
+  /* eslint-disable no-underscore-dangle */
+  instructorController.addNewBatch(newBatch._id, newBatch.instructorId._id);
+};
+
+const createBatch = async (req, res) => {
   try {
-    await newBatch.save();
-    /* eslint-disable no-underscore-dangle */
-    instructorController.addNewBatch(newBatch._id, newBatch.instructorId._id);
+    await createBatchHere(req.body, req.decoded.email);
     console.log('Batch Created');
     res.json({ success: 'Batch created' });
   } catch (error) {
@@ -71,13 +61,10 @@ const createBatch = async (req, res) => {
   }
 };
 
-const editBatch = async (req, res) => {
+const editBatchHere = async (body, email) => {
   const {
     oldBatchId, status, students, startDate, endDate, batchID,
-  } = req.body;
-  // check with the ensure authenticated call to add the email later in the req.body
-  // to get the verified person editing the right batch
-  const { email } = req.decoded;
+  } = body;
   const form = {
     studentCount: students,
     batchId: batchID,
@@ -87,24 +74,29 @@ const editBatch = async (req, res) => {
   };
   const getInstructorId = await UserSchema.findOne({ email }, { _id: 1 });
   const instructorId = await InstructorModel.findOne({ loginId: getInstructorId }, { _id: 1 });
-  UserBatchModel.findOneAndUpdate({ batchId: oldBatchId, instructorId }, form, (err) => {
-    if (err) {
-      res.json({ error: 'error at finding the batch' });
-    } else {
-      res.json({ success: 'Batch Updated' });
-    }
-  });
+  await UserBatchModel.findOneAndUpdate({ batchId: oldBatchId, instructorId }, form);
+};
+
+const editBatch = async (req, res) => {
+  try {
+    await editBatchHere(req.body, req.decoded.email);
+    res.json({ success: 'Batch Updated' });
+  } catch (error) {
+    res.json({ error: 'error at finding the batch' });
+  }
+};
+
+const deleteBatchHere = async (body, email) => {
+  const { batchId } = body;
+  const getInstructorId = await UserSchema.findOne({ email }, { _id: 1 });
+  const instructorId = await InstructorModel.findOne({ loginId: getInstructorId }, { _id: 1 });
+  await UserBatchModel.findOneAndRemove({ instructorId, batchId });
 };
 
 const deleteBatch = async (req, res) => {
   // authenticate with the help of ensureauthenticate and get the email from token.
-  const { batchId } = req.body;
-  const { email } = req.decoded;
   try {
-    const getInstructorId = await UserSchema.findOne({ email }, { _id: 1 });
-    const instructorId = await InstructorModel.findOne({ loginId: getInstructorId }, { _id: 1 });
-
-    await UserBatchModel.findOneAndRemove({ instructorId, batchId });
+    await deleteBatchHere(req.body, req.decoded.email);
     res.json({ success: 'Deleted Succesfully' });
   } catch (error) {
     res.json({ error: 'Error deleting Batch' });
@@ -114,8 +106,12 @@ const deleteBatch = async (req, res) => {
 
 export default {
   getBatches,
-  createBatch,
-  editBatch,
-  deleteBatch,
+  getBatchById,
   getBatchesMain,
+  createBatch,
+  createBatchHere,
+  editBatch,
+  editBatchHere,
+  deleteBatch,
+  deleteBatchHere,
 };

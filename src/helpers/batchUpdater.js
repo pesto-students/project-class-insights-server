@@ -40,6 +40,7 @@ const updateSpecificStudentCount = async (batchId) => {
   }
 };
 
+
 export default {
   updateStudentCount,
   updateSpecificStudentCount,
