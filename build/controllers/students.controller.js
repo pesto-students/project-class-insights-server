@@ -34,35 +34,43 @@ const createStudent = async (req, res) => {
   const {
     email, batchId
   } = req.body;
-  try {
-    const realBatchId = await _batches2.default.findOne({ batchId }, { _id: 1 });
-    const newStudent = new _students2.default({
-      email,
-      batchId: realBatchId.id
-    });
-    const userId = await _user2.default.findOne({ email }, { _id: 1 });
-    const student = await _students2.default.findOne({ studentObjectId: userId }, {});
-    if (student) {
-      await _students2.default.findOneAndUpdate({ studentObjectId: userId }, {
-        $addToSet: { batchId: realBatchId }
-      });
-      await (0, _triggerStudentInvite2.default)(newStudent);
-      res.json({ success: 'Student created and added to the batchId' });
-    } else {
-      const alreadyPresentStudent = await _students2.default.findOne({ email }, {});
-      if (alreadyPresentStudent) {
-        res.json({ error: 'Already added in this batch' });
-      } else {
-        const savedStudent = await newStudent.save();
-        await (0, _triggerStudentInvite2.default)(savedStudent);
-        res.json({ success: 'Student created and added to the batchId' });
-      }
-    }
+  const userData = await _user2.default.findOne({ email }, { _id: 0, isInstructor: 1 });
+  const isInstructor = userData ? userData.isInstructor : false;
 
-    _batchUpdater2.default.updateStudentCount();
-    console.log('Student added to the batch');
-  } catch (error) {
-    res.json({ error: 'Error creating students' });
+  if (email !== req.decoded.email && !isInstructor) {
+    try {
+      const realBatchId = await _batches2.default.findOne({ batchId }, { _id: 1 });
+      const newStudent = new _students2.default({
+        email,
+        batchId: realBatchId.id
+      });
+      const userId = await _user2.default.findOne({ email }, { _id: 1 });
+      const student = await _students2.default.findOne({ studentObjectId: userId }, {});
+      if (student) {
+        await _students2.default.findOneAndUpdate({ studentObjectId: userId }, {
+          $addToSet: { batchId: realBatchId }
+        });
+        res.json({ success: 'Student created and added to the batchId' });
+      } else {
+        const alreadyPresentStudent = await _students2.default.findOne({
+          email, batchId: realBatchId.id
+        }, {});
+        if (alreadyPresentStudent) {
+          res.json({ error: 'Already added in this batch' });
+        } else {
+          const savedStudent = await newStudent.save();
+          await (0, _triggerStudentInvite2.default)(savedStudent);
+          res.json({ success: 'Student created and added to the batchId' });
+        }
+      }
+
+      _batchUpdater2.default.updateStudentCount();
+      console.log('Student added to the batch');
+    } catch (error) {
+      res.json({ error: 'Error creating students' });
+    }
+  } else {
+    res.json({ error: 'You can\'t add instructor as a student' });
   }
 };
 
